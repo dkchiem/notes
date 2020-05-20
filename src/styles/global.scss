@@ -1,0 +1,12 @@
+@import './_theme.scss';
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: $theme-gray;
+}

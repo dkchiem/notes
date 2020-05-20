@@ -1,0 +1,13 @@
+{
+  "generator-svelte": {
+    "promptValues": {
+      "name": "Vu Dang Khoa Chiem",
+      "email": "cvdkhoa@gmail.com",
+      "website": "dcodes.dev",
+      "scriptLanguage": "JavaScript",
+      "styleLanguage": "SCSS",
+      "markupLanguage": "HTML",
+      "gitInit": true
+    }
+  }
+}
