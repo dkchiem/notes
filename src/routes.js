@@ -5,8 +5,13 @@ import Index from '@views/index.svelte';
 import firebase from 'firebase/app';
 
 function userIsLoggedIn() {
-  const user = firebase.auth().currentUser;
-  return user ? true : false;
+  return firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 }
 
 const routes = [
@@ -18,12 +23,22 @@ const routes = [
   {
     name: '/login',
     component: Login,
-    onlyIf: { guard: !userIsLoggedIn, redirect: '/' },
+    onlyIf: {
+      guard: () => {
+        userIsLoggedIn ? false : true;
+      },
+      redirect: '/',
+    },
   },
   {
     name: '/signup',
     component: SignUp,
-    onlyIf: { guard: !userIsLoggedIn, redirect: '/' },
+    onlyIf: {
+      guard: () => {
+        userIsLoggedIn ? false : true;
+      },
+      redirect: '/',
+    },
   },
 ];
 

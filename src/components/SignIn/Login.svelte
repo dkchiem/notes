@@ -17,20 +17,49 @@
 
   function submit(e) {
     showSpinner = true;
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        showSpinner = false;
-        navigateTo('/');
-      })
-      .catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        showSpinner = false;
-        console.log(`Error ${errorCode}: ${errorMessage}`);
-        errorMsg = errorMessage;
-      });
+    if (staySignedIn) {
+      firebase
+        .auth()
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+          return firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(() => {
+              showSpinner = false;
+              navigateTo('/');
+            })
+            .catch(function(error) {
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              showSpinner = false;
+              console.log(`Error ${errorCode}: ${errorMessage}`);
+              errorMsg = errorMessage;
+            });
+        })
+        .catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          showSpinner = false;
+          console.log(`Error ${errorCode}: ${errorMessage}`);
+          errorMsg = errorMessage;
+        });
+    } else {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          showSpinner = false;
+          navigateTo('/');
+        })
+        .catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          showSpinner = false;
+          console.log(`Error ${errorCode}: ${errorMessage}`);
+          errorMsg = errorMessage;
+        });
+    }
   }
 </script>
 
@@ -59,7 +88,6 @@
       background: $theme-green;
       display: block;
       height: 4px;
-      opacity: 0;
       position: relative;
       top: 2px;
       transform-origin: 0%;
@@ -72,7 +100,6 @@
     }
     &:focus-within::after {
       transform: scaleX(1);
-      opacity: 1;
     }
 
     .toggle-password {

@@ -12,6 +12,7 @@
 
 <style lang="scss">
   @import '../../styles/_theme.scss';
+  @import '../../styles/_variables.scss';
 
   $bar-header-height: 50px;
   $bar-color: $theme-green;
@@ -42,7 +43,6 @@
     width: 20%;
     height: 100vh;
     padding-top: 70px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     z-index: 500;
     position: relative;
     animation-delay: 0.1s;
@@ -65,7 +65,7 @@
     height: $bar-header-height;
     width: 40px;
     background-color: $bar-color;
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 $border-radius $border-radius 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -93,6 +93,7 @@
     color: white;
     display: flex;
     align-items: center;
+    padding: 0 1rem;
   }
 </style>
 

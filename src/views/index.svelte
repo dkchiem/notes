@@ -8,8 +8,10 @@
 
   const user = firebase.auth().currentUser;
 
+  let uid;
+
   if (user != null) {
-    const uid = user.uid;
+    uid = user.uid;
     console.log(uid);
   }
 </script>
@@ -32,7 +34,7 @@
 <Header />
 
 <div id="container">
-  <CategoryBar userID={'UR2rQONWehG0QytSsAy4'} />
+  <CategoryBar userID={uid} />
   <NotesBar />
   <div id="content-box">
     <div id="content">
