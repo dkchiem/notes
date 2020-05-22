@@ -4,58 +4,69 @@
   import firebase from 'firebase/app';
   import { navigateTo } from 'svelte-router-spa';
 
-  let strength = 0,
-    validations = [],
-    showPassword = false,
-    email,
+  let showPassword = false,
     password,
+    email,
     showSpinner,
-    emailInvalid,
-    errorMsg;
+    errorMsg,
+    staySignedIn;
 
-  function validateEmail() {
-    if (email) {
-      const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      emailInvalid = emailRegex.test(String(email).toLowerCase())
-        ? false
-        : true;
-    }
-  }
-
-  function validatePassword(e) {
+  function getPassword(e) {
     password = e.target.value;
-    validations = [
-      password.length > 8,
-      password.search(/[A-Z]/) > -1,
-      password.search(/[0-9]/) > -1,
-      password.search(/[$&+,:;=?@#]/) > -1,
-    ];
-    strength = validations.reduce((acc, cur) => acc + cur);
   }
 
-  function submit() {
+  function submit(e) {
     showSpinner = true;
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        showSpinner = false;
-        navigateTo('/');
-      })
-      .catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        showSpinner = false;
-        console.log(`Error ${errorCode}: ${errorMessage}`);
-        errorMsg = errorMessage;
-      });
+    if (staySignedIn) {
+      firebase
+        .auth()
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+          return firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(() => {
+              showSpinner = false;
+              navigateTo('/');
+            })
+            .catch(function(error) {
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              showSpinner = false;
+              console.log(`Error ${errorCode}: ${errorMessage}`);
+              errorMsg = errorMessage;
+            });
+        })
+        .catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          showSpinner = false;
+          console.log(`Error ${errorCode}: ${errorMessage}`);
+          errorMsg = errorMessage;
+        });
+    } else {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          showSpinner = false;
+          navigateTo('/');
+        })
+        .catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          showSpinner = false;
+          console.log(`Error ${errorCode}: ${errorMessage}`);
+          errorMsg = errorMessage;
+        });
+    }
   }
 </script>
 
 <style lang="scss">
-  @import '../../styles/_theme.scss';
+  @import 'src/styles/_theme.scss';
 
-  #signin {
+  #login {
     font-family: 'Unica One', cursive;
     text-align: center;
     user-select: none;
@@ -77,7 +88,6 @@
       background: $theme-green;
       display: block;
       height: 4px;
-      opacity: 0;
       position: relative;
       top: 2px;
       transform-origin: 0%;
@@ -90,7 +100,6 @@
     }
     &:focus-within::after {
       transform: scaleX(1);
-      opacity: 1;
     }
 
     .toggle-password {
@@ -143,39 +152,6 @@
   .input:not(:placeholder-shown) + .label {
     transform: scale(0.8) translateY(-5rem);
     opacity: 1;
-  }
-
-  .strength {
-    display: flex;
-    height: 20px;
-    width: 100%;
-    .bar {
-      margin-right: 5px;
-      height: 100%;
-      width: 25%;
-      transition: box-shadow 0.5s;
-      box-shadow: inset 0px 20px #dedede;
-      border-radius: 3px;
-      &#bar-1 {
-        background: linear-gradient(to right, red, orangered);
-      }
-      &#bar-2 {
-        background: linear-gradient(to right, orangered, yellow);
-      }
-      &#bar-3 {
-        background: linear-gradient(to right, yellow, yellowgreen);
-      }
-      &#bar-4 {
-        background: linear-gradient(to right, yellowgreen, green);
-      }
-      &.bar-show {
-        box-shadow: none;
-      }
-    }
-  }
-
-  #requirements {
-    margin: 1rem;
   }
 
   button {
@@ -235,9 +211,24 @@
     text-align: center;
     margin: 0.75rem 0;
   }
+
+  #staySignedIn {
+    margin: 2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    input {
+      height: 20px;
+      width: 20px;
+      margin-right: 8px;
+      border: none;
+      box-shadow: none;
+      cursor: pointer;
+    }
+  }
 </style>
 
-<h1 id="signin">Sign Up</h1>
+<h1 id="login">Login</h1>
 <form>
   <div class="spinner-container" class:show={showSpinner}>
     <Spinner />
@@ -249,9 +240,7 @@
       class="input"
       placeholder=""
       bind:value={email}
-      disabled={showSpinner}
-      on:focusout={validateEmail}
-      class:emailInvalid />
+      disabled={showSpinner} />
     <label for="email" class="label">Email</label>
   </div>
 
@@ -261,7 +250,7 @@
       name="password"
       class="input"
       placeholder=""
-      on:input={validatePassword}
+      on:input={getPassword}
       disabled={showSpinner} />
     <label for="password" class="label">Password</label>
     <span
@@ -315,32 +304,26 @@
     </span>
   </div>
 
-  <div class="strength">
-    <span class="bar" id="bar-1" class:bar-show={strength > 0} />
-    <span class="bar" id="bar-2" class:bar-show={strength > 1} />
-    <span class="bar" id="bar-3" class:bar-show={strength > 2} />
-    <span class="bar" id="bar-4" class:bar-show={strength > 3} />
+  <div id="staySignedIn">
+    <input
+      type="checkbox"
+      name="staySignedIn"
+      class="checkbox"
+      placeholder=""
+      bind:value={staySignedIn}
+      disabled={showSpinner} />
+    <span>Keep me logged in</span>
   </div>
-
-  <ul id="requirements">
-    <li>{validations[0] ? '✔️' : '❌'} must be at least 8 characters</li>
-    <li>{validations[1] ? '✔️' : '❌'} must contain a capital letter</li>
-    <li>{validations[2] ? '✔️' : '❌'} must contain a number</li>
-    <li>{validations[3] ? '✔️' : '❌'} must contain one of $&+,:;=?@#</li>
-  </ul>
 
   {#if errorMsg}
     <p id="errorMsg">{errorMsg}</p>
   {/if}
 
-  <button
-    disabled={strength < 4 || emailInvalid || showSpinner}
-    on:click={submit}
-    type="button">
-    Sign Up
+  <button disabled={!email || !password} on:click={submit} type="button">
+    Log In
   </button>
 
   <div class="switchBtn-container">
-    <a class="switchBtn" href="/login">Have an account? Log In</a>
+    <a class="switchBtn" href="/signup">No account yet? Sign Up</a>
   </div>
 </form>

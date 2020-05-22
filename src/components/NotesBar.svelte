@@ -7,7 +7,7 @@
 </script>
 
 <style lang="scss">
-  @import '../styles/_theme.scss';
+  @import 'src/styles/_theme.scss';
 
   $bar-header-height: 50px;
   $bar-color: $theme-gray;

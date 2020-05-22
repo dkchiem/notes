@@ -3,8 +3,8 @@
 </script>
 
 <style lang="scss">
-  @import 'styles/_theme.scss';
-  @import '../styles/_variables.scss';
+  @import 'src/styles/_theme.scss';
+  @import 'src/styles/_variables.scss';
 
   header {
     padding: 0 30px;

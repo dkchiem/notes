@@ -11,8 +11,8 @@
 </script>
 
 <style lang="scss">
-  @import '../../styles/_theme.scss';
-  @import '../../styles/_variables.scss';
+  @import 'src/styles/_theme.scss';
+  @import 'src/styles/_variables.scss';
 
   $bar-header-height: 50px;
   $bar-color: $theme-green;

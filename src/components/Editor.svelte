@@ -1,5 +1,6 @@
 <style lang="scss">
-  @import '../styles/_theme.scss';
+  @import 'src/styles/_theme.scss';
+  @import 'src/styles/_variables.scss';
 
   #title {
     width: 100%;

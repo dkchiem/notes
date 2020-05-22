@@ -1,5 +1,5 @@
 <style lang="scss">
-  @import '../../styles/_theme.scss';
+  @import 'src/styles/_theme.scss';
   // nav {
   //   background-color: red;
   //   padding: 0 1rem;

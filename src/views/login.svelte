@@ -1,8 +1,8 @@
 <script>
-  import SignInContainer from '@components/SignIn/SignInContainer.svelte';
-  import Login from '@components/SignIn/Login.svelte';
+  import AuthenticationContainer from '@components/Authentication/AuthenticationContainer.svelte';
+  import Login from '@components/Authentication/Login.svelte';
 </script>
 
-<SignInContainer>
+<AuthenticationContainer>
   <Login />
-</SignInContainer>
+</AuthenticationContainer>
