@@ -4,6 +4,3 @@
 
 **Production**: `npm run build`  
 **Development**: `npm run dev`
-# notes
-# notes
-# notes
