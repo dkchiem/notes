@@ -1,42 +1,71 @@
 <script>
-  let showPassword = false;
-  let email;
-  let password;
+  import Spinner from '../Spinner.svelte';
 
-  function submit() {}
+  import firebase from 'firebase/app';
+  import { navigateTo } from 'svelte-router-spa';
+
+  let showPassword = false,
+    password,
+    email,
+    showSpinner,
+    errorMsg,
+    staySignedIn;
+
+  function getPassword(e) {
+    password = e.target.value;
+  }
+
+  function submit(e) {
+    showSpinner = true;
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        showSpinner = false;
+        navigateTo('/');
+      })
+      .catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        showSpinner = false;
+        console.log(`Error ${errorCode}: ${errorMessage}`);
+        errorMsg = errorMessage;
+      });
+  }
 </script>
 
 <style lang="scss">
   @import '../../styles/_theme.scss';
 
   #login {
-    text-align: center;
     font-family: 'Unica One', cursive;
+    text-align: center;
+    user-select: none;
   }
 
   form {
     max-width: 500px;
+    position: relative;
   }
 
   .field {
-    width: 100%;
-    margin: 0 auto;
-    position: relative;
     border-bottom: 2px dashed $theme-gray;
     margin: 4rem auto 1rem;
+    position: relative;
+    width: 100%;
     transition: 0.5s;
     &::after {
       content: '';
-      position: relative;
+      background: $theme-green;
       display: block;
       height: 4px;
-      width: 100%;
-      background: $theme-green;
-      transform: scaleX(0);
-      transform-origin: 0%;
       opacity: 0;
-      transition: all 500ms ease;
+      position: relative;
       top: 2px;
+      transform-origin: 0%;
+      transform: scaleX(0);
+      transition: all 500ms ease;
+      width: 100%;
     }
     &:focus-within {
       border-color: transparent;
@@ -45,8 +74,50 @@
       transform: scaleX(1);
       opacity: 1;
     }
-    .eye {
-      height: 1rem;
+
+    .toggle-password {
+      position: absolute;
+      cursor: pointer;
+      font-size: 1rem;
+      right: 0.25rem;
+      bottom: 0.5rem;
+      .eye {
+        height: 1rem;
+      }
+    }
+
+    .label {
+      color: $theme-gray;
+      font-size: 1.2rem;
+      position: absolute;
+      transform: translateY(-2rem);
+      transform-origin: 0%;
+      transition: transform 0.4s;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .input {
+      box-shadow: none;
+      margin-bottom: 0.5rem;
+      outline: none;
+      border: none;
+      overflow: hidden;
+      margin: 0;
+      width: 100%;
+      padding: 0.25rem 0;
+      background: none;
+      color: $theme-gray;
+      font-size: 1.2em;
+      font-weight: bold;
+      transition: border 0.5s;
+      &:disabled {
+        color: lighten($theme-gray, 50%);
+      }
+      &.emailInvalid {
+        color: red;
+      }
     }
   }
 
@@ -54,40 +125,6 @@
   .input:not(:placeholder-shown) + .label {
     transform: scale(0.8) translateY(-5rem);
     opacity: 1;
-  }
-
-  .label {
-    color: $theme-gray;
-    font-size: 1.2rem;
-    position: absolute;
-    transform: translateY(-2rem);
-    transform-origin: 0%;
-    transition: transform 0.4s;
-    display: block;
-  }
-
-  .input {
-    box-shadow: none;
-    margin-bottom: 0.5rem;
-    outline: none;
-    border: none;
-    overflow: hidden;
-    margin: 0;
-    width: 100%;
-    padding: 0.25rem 0;
-    background: none;
-    color: $theme-gray;
-    font-size: 1.2em;
-    font-weight: bold;
-    transition: border 0.5s;
-  }
-
-  .toggle-password {
-    position: absolute;
-    cursor: pointer;
-    font-size: 1rem;
-    right: 0.25rem;
-    bottom: 0.5rem;
   }
 
   button {
@@ -130,17 +167,53 @@
       }
     }
   }
+
+  .spinner-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    &.show {
+      display: block;
+    }
+  }
+
+  #errorMsg {
+    color: red;
+    font-size: 0.75rem;
+    text-align: center;
+    margin: 0.75rem 0;
+  }
+
+  #staySignedIn {
+    margin: 2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    input {
+      height: 20px;
+      width: 20px;
+      margin-right: 8px;
+      border: none;
+      box-shadow: none;
+      cursor: pointer;
+    }
+  }
 </style>
 
 <h1 id="login">Login</h1>
 <form>
+  <div class="spinner-container" class:show={showSpinner}>
+    <Spinner />
+  </div>
   <div class="field">
     <input
       type="email"
       name="email"
       class="input"
       placeholder=""
-      bind:value={email} />
+      bind:value={email}
+      disabled={showSpinner} />
     <label for="email" class="label">Email</label>
   </div>
 
@@ -149,7 +222,9 @@
       type={showPassword ? 'text' : 'password'}
       name="password"
       class="input"
-      placeholder="" />
+      placeholder=""
+      on:input={getPassword}
+      disabled={showSpinner} />
     <label for="password" class="label">Password</label>
     <span
       class="toggle-password"
@@ -202,7 +277,24 @@
     </span>
   </div>
 
-  <button disabled={!email} on:click={submit}>Log In</button>
+  <div id="staySignedIn">
+    <input
+      type="checkbox"
+      name="staySignedIn"
+      class="checkbox"
+      placeholder=""
+      bind:value={staySignedIn}
+      disabled={showSpinner} />
+    <span>Keep me logged in</span>
+  </div>
+
+  {#if errorMsg}
+    <p id="errorMsg">{errorMsg}</p>
+  {/if}
+
+  <button disabled={!email || !password} on:click={submit} type="button">
+    Log In
+  </button>
 
   <div class="switchBtn-container">
     <a class="switchBtn" href="/signup">No account yet? Sign Up</a>

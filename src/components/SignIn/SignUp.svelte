@@ -1,55 +1,89 @@
 <script>
-  let strength = 0;
-  let validations = [];
-  let showPassword = false;
-  let email;
+  import Spinner from '../Spinner.svelte';
+
+  import firebase from 'firebase/app';
+  import { navigateTo } from 'svelte-router-spa';
+
+  let strength = 0,
+    validations = [],
+    showPassword = false,
+    email,
+    password,
+    showSpinner,
+    emailInvalid,
+    errorMsg;
+
+  function validateEmail() {
+    if (email) {
+      const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      emailInvalid = emailRegex.test(String(email).toLowerCase())
+        ? false
+        : true;
+    }
+  }
 
   function validatePassword(e) {
-    const password = e.target.value;
+    password = e.target.value;
     validations = [
       password.length > 8,
       password.search(/[A-Z]/) > -1,
       password.search(/[0-9]/) > -1,
       password.search(/[$&+,:;=?@#]/) > -1,
     ];
-
     strength = validations.reduce((acc, cur) => acc + cur);
   }
 
-  function submit() {}
+  function submit() {
+    showSpinner = true;
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        showSpinner = false;
+        navigateTo('/');
+      })
+      .catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        showSpinner = false;
+        console.log(`Error ${errorCode}: ${errorMessage}`);
+        errorMsg = errorMessage;
+      });
+  }
 </script>
 
 <style lang="scss">
   @import '../../styles/_theme.scss';
 
   #signin {
-    text-align: center;
     font-family: 'Unica One', cursive;
+    text-align: center;
+    user-select: none;
   }
 
   form {
     max-width: 500px;
+    position: relative;
   }
 
   .field {
-    width: 100%;
-    margin: 0 auto;
-    position: relative;
     border-bottom: 2px dashed $theme-gray;
     margin: 4rem auto 1rem;
+    position: relative;
+    width: 100%;
     transition: 0.5s;
     &::after {
       content: '';
-      position: relative;
+      background: $theme-green;
       display: block;
       height: 4px;
-      width: 100%;
-      background: $theme-green;
-      transform: scaleX(0);
-      transform-origin: 0%;
       opacity: 0;
-      transition: all 500ms ease;
+      position: relative;
       top: 2px;
+      transform-origin: 0%;
+      transform: scaleX(0);
+      transition: all 500ms ease;
+      width: 100%;
     }
     &:focus-within {
       border-color: transparent;
@@ -58,8 +92,50 @@
       transform: scaleX(1);
       opacity: 1;
     }
-    .eye {
-      height: 1rem;
+
+    .toggle-password {
+      position: absolute;
+      cursor: pointer;
+      font-size: 1rem;
+      right: 0.25rem;
+      bottom: 0.5rem;
+      .eye {
+        height: 1rem;
+      }
+    }
+
+    .label {
+      color: $theme-gray;
+      font-size: 1.2rem;
+      position: absolute;
+      transform: translateY(-2rem);
+      transform-origin: 0%;
+      transition: transform 0.4s;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .input {
+      box-shadow: none;
+      margin-bottom: 0.5rem;
+      outline: none;
+      border: none;
+      overflow: hidden;
+      margin: 0;
+      width: 100%;
+      padding: 0.25rem 0;
+      background: none;
+      color: $theme-gray;
+      font-size: 1.2em;
+      font-weight: bold;
+      transition: border 0.5s;
+      &:disabled {
+        color: lighten($theme-gray, 50%);
+      }
+      &.emailInvalid {
+        color: red;
+      }
     }
   }
 
@@ -67,32 +143,6 @@
   .input:not(:placeholder-shown) + .label {
     transform: scale(0.8) translateY(-5rem);
     opacity: 1;
-  }
-
-  .label {
-    color: $theme-gray;
-    font-size: 1.2rem;
-    position: absolute;
-    transform: translateY(-2rem);
-    transform-origin: 0%;
-    transition: transform 0.4s;
-    display: block;
-  }
-
-  .input {
-    box-shadow: none;
-    margin-bottom: 0.5rem;
-    outline: none;
-    border: none;
-    overflow: hidden;
-    margin: 0;
-    width: 100%;
-    padding: 0.25rem 0;
-    background: none;
-    color: $theme-gray;
-    font-size: 1.2em;
-    font-weight: bold;
-    transition: border 0.5s;
   }
 
   .strength {
@@ -124,16 +174,8 @@
     }
   }
 
-  .toggle-password {
-    position: absolute;
-    cursor: pointer;
-    font-size: 1rem;
-    right: 0.25rem;
-    bottom: 0.5rem;
-  }
-
   #requirements {
-    margin: 1.5rem;
+    margin: 1rem;
   }
 
   button {
@@ -176,17 +218,40 @@
       }
     }
   }
+
+  .spinner-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    &.show {
+      display: block;
+    }
+  }
+
+  #errorMsg {
+    color: red;
+    font-size: 0.75rem;
+    text-align: center;
+    margin: 0.75rem 0;
+  }
 </style>
 
 <h1 id="signin">Sign Up</h1>
 <form>
+  <div class="spinner-container" class:show={showSpinner}>
+    <Spinner />
+  </div>
   <div class="field">
     <input
       type="email"
       name="email"
       class="input"
       placeholder=""
-      bind:value={email} />
+      bind:value={email}
+      disabled={showSpinner}
+      on:focusout={validateEmail}
+      class:emailInvalid />
     <label for="email" class="label">Email</label>
   </div>
 
@@ -196,7 +261,8 @@
       name="password"
       class="input"
       placeholder=""
-      on:input={validatePassword} />
+      on:input={validatePassword}
+      disabled={showSpinner} />
     <label for="password" class="label">Password</label>
     <span
       class="toggle-password"
@@ -263,7 +329,16 @@
     <li>{validations[3] ? '✔️' : '❌'} must contain one of $&+,:;=?@#</li>
   </ul>
 
-  <button disabled={strength < 4 || !email} on:click={submit}>Sign Up</button>
+  {#if errorMsg}
+    <p id="errorMsg">{errorMsg}</p>
+  {/if}
+
+  <button
+    disabled={strength < 4 || emailInvalid || showSpinner}
+    on:click={submit}
+    type="button">
+    Sign Up
+  </button>
 
   <div class="switchBtn-container">
     <a class="switchBtn" href="/login">Have an account? Log In</a>

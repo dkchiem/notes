@@ -3,6 +3,15 @@
   import CategoryBar from '@components/CategoryBar/CategoryBar.svelte';
   import NotesBar from '@components/NotesBar.svelte';
   import Editor from '@components/Editor.svelte';
+
+  import firebase from 'firebase/app';
+
+  const user = firebase.auth().currentUser;
+
+  if (user != null) {
+    const uid = user.uid;
+    console.log(uid);
+  }
 </script>
 
 <style lang="scss">
