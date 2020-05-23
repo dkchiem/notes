@@ -3,7 +3,7 @@
   const zIndex = 500 - position;
   const closeBtnPos = position == 0 ? '5px' : `${55 * position + 5}px`;
   const closedWidth = position == 0 ? '15px' : '0';
-  const contentLeftMargin = position == 0 ? '10px' : '40px';
+  const contentLeftMargin = position == 0 ? '10px' : '30px';
 
   let isClosed;
 
@@ -62,7 +62,7 @@
 
     #content {
       overflow: hidden;
-      margin: 10px;
+      margin: 10px 20px;
       display: flex;
       flex-direction: column;
       padding-left: $content-left-margin;

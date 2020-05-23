@@ -2,6 +2,8 @@
   import Header from '@components/Header.svelte';
   import Editor from '@components/Editor.svelte';
   import Bar from '@components/Bars/Bar.svelte';
+  import NoteItem from '@components/Bars/Notes/NoteItem.svelte';
+  import CategoryItem from '@components/Bars/Categories/CategoryItem.svelte';
 
   import firebase from 'firebase/app';
 
@@ -32,7 +34,13 @@
 <div id="container">
 
   <Bar title="Categories" barColor="#52de97" position="0">Hello</Bar>
-  <Bar title="Notes" barColor="#303030" position="1">Hello</Bar>
+  <Bar title="Notes" barColor="#303030" position="1">
+    <NoteItem>Test</NoteItem>
+    <NoteItem>Test</NoteItem>
+    <NoteItem>Test</NoteItem>
+    <NoteItem>Test</NoteItem>
+    <NoteItem>Test</NoteItem>
+  </Bar>
 
   <div id="content-box">
     <div id="content">
