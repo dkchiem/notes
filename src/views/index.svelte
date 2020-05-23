@@ -1,7 +1,7 @@
 <script>
   import Header from '@components/Header.svelte';
   import Editor from '@components/Editor.svelte';
-  import Bar from '@components/Bar.svelte';
+  import Bar from '@components/Bars/Bar.svelte';
 
   import firebase from 'firebase/app';
 
