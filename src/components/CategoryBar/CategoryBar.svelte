@@ -65,7 +65,7 @@
     height: $bar-header-height;
     width: 40px;
     background-color: $bar-color;
-    border-radius: 0 $border-radius $border-radius 0;
+    border-radius: 0 10px 10px 0;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,8 +1,7 @@
 <script>
   import Header from '@components/Header.svelte';
-  import CategoryBar from '@components/CategoryBar/CategoryBar.svelte';
-  import NotesBar from '@components/NotesBar.svelte';
   import Editor from '@components/Editor.svelte';
+  import Bar from '@components/Bar.svelte';
 
   import firebase from 'firebase/app';
 
@@ -31,8 +30,10 @@
 
 <Header />
 <div id="container">
-  <CategoryBar userID={uid} />
-  <NotesBar />
+
+  <Bar title="Categories" barColor="#52de97" position="0">Hello</Bar>
+  <Bar title="Notes" barColor="#303030" position="1">Hello</Bar>
+
   <div id="content-box">
     <div id="content">
       <Editor />
