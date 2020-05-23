@@ -64,7 +64,7 @@
 </script>
 
 <style lang="scss">
-  @import 'src/styles/_theme.scss';
+  @import 'src/styles/_colors.scss';
 
   #login {
     font-family: 'Unica One', cursive;

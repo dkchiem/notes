@@ -1,5 +1,5 @@
 <style lang="scss">
-  @import 'src/styles/_theme.scss';
+  @import 'src/styles/_colors.scss';
 
   @keyframes bg-animation {
     0% {

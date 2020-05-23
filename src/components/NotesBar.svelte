@@ -7,7 +7,7 @@
 </script>
 
 <style lang="scss">
-  @import 'src/styles/_theme.scss';
+  @import 'src/styles/_colors.scss';
 
   $bar-header-height: 50px;
   $bar-color: $theme-gray;
@@ -36,8 +36,8 @@
   #noteBar {
     background-color: $bar-color;
     width: 20%;
-    height: 100vh;
-    padding-top: 70px;
+    height: 100%;
+    padding-top: 10px;
     z-index: 499;
     position: relative;
     animation-delay: 0.1s;

@@ -1,26 +1,21 @@
 <style lang="scss">
-  @import 'src/styles/_theme.scss';
-  // nav {
-  //   background-color: red;
-  //   padding: 0 1rem;
-  //   ul {
-  //     max-width: 100%;
-  //     height: 100%;
-  //     display: flex;
-  //     justify-content: flex-end;
-  //   }
-  // }
-  #menu {
+  @import 'src/styles/_colors.scss';
+  #menu-container {
     position: absolute;
     top: 58px;
     width: 300px;
-    transform: translateX(-45%);
-    background-color: $theme-gray;
+    //transform: translateX(-45%);
     border: solid 1px #979797;
     border-radius: 10px;
     padding: 1rem;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    right: 10px;
   }
 </style>
 
-<div id="menu" />
+<div id="menu-container">
+  <slot />
+</div>

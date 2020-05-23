@@ -7,32 +7,29 @@
   import firebase from 'firebase/app';
 
   const user = firebase.auth().currentUser;
-
   let uid;
 
-  if (user != null) {
-    uid = user.uid;
-    console.log(uid);
-  }
+  user && (uid = user.uid);
 </script>
 
 <style lang="scss">
+  @import 'src/styles/_colors.scss';
+  @import 'src/styles/_variables.scss';
+
   #container {
     display: flex;
-  }
-  #content-box {
-    padding-top: 80px;
-    width: auto;
-    display: block;
-    flex: 1;
-    #content {
-      margin: 0 60px;
+    height: 100vh;
+    padding-top: $header-height;
+    #content-box {
+      width: auto;
+      display: block;
+      flex: 1;
+      padding: 20px 60px;
     }
   }
 </style>
 
 <Header />
-
 <div id="container">
   <CategoryBar userID={uid} />
   <NotesBar />

@@ -11,7 +11,7 @@
 </script>
 
 <style lang="scss">
-  @import 'src/styles/_theme.scss';
+  @import 'src/styles/_colors.scss';
   @import 'src/styles/_variables.scss';
 
   $bar-header-height: 50px;
@@ -41,8 +41,8 @@
   #categoryBar {
     background-color: $bar-color;
     width: 20%;
-    height: 100vh;
-    padding-top: 70px;
+    height: 100%;
+    padding-top: 10px;
     z-index: 500;
     position: relative;
     animation-delay: 0.1s;

@@ -1,5 +1,9 @@
+<script>
+
+</script>
+
 <style lang="scss">
-  @import 'src/styles/_theme.scss';
+  @import 'src/styles/_colors.scss';
   @import 'src/styles/_variables.scss';
 
   #title {

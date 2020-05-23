@@ -1,4 +1,4 @@
-@import './_theme.scss';
+@import './_colors.scss';
 
 * {
   padding: 0;
@@ -9,5 +9,5 @@
 body {
   font-family: 'Montserrat', sans-serif;
   color: $theme-gray;
-  background-color: #eeeeee;
+  background-color: $theme-light-gray;
 }
