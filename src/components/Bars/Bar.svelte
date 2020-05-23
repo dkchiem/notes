@@ -5,7 +5,7 @@
   const closedWidth = position == 0 ? '15px' : '0';
   const contentLeftMargin = position == 0 ? '10px' : '40px';
 
-  let isClosed = false;
+  let isClosed;
 
   function menuToggled() {
     isClosed = !isClosed;
@@ -46,7 +46,7 @@
     background-color: $bar-color;
     width: 20%;
     height: 100%;
-    padding-top: 20px;
+    padding-top: 10px;
     z-index: $z-index;
     position: relative;
     animation-delay: 0.1s;
