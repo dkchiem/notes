@@ -43,6 +43,10 @@ export default {
     alias({
       entries: [
         {
+          find: /@styles\/(.*)\.(.*)/,
+          replacement: __dirname + '/src/styles/$1.$2',
+        },
+        {
           find: /@views\/(.*)\.(.*)/,
           replacement: __dirname + '/src/views/$1.$2',
         },

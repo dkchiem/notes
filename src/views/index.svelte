@@ -4,6 +4,7 @@
   import Bar from '@components/Bars/Bar.svelte';
   import NoteItem from '@components/Bars/Notes/NoteItem.svelte';
   import CategoryItem from '@components/Bars/Categories/CategoryItem.svelte';
+  import CategoriesList from '@components/Bars/Categories/CategoriesList.svelte';
 
   import firebase from 'firebase/app';
 
@@ -33,7 +34,9 @@
 <Header />
 <div id="container">
 
-  <Bar title="Categories" barColor="#52de97" position="0">Hello</Bar>
+  <Bar title="Categories" barColor="#52de97" position="0">
+    <CategoriesList userID="UR2rQONWehG0QytSsAy4" />
+  </Bar>
   <Bar title="Notes" barColor="#303030" position="1">
     <NoteItem>Test</NoteItem>
     <NoteItem>Test</NoteItem>
@@ -43,8 +46,6 @@
   </Bar>
 
   <div id="content-box">
-    <div id="content">
-      <Editor />
-    </div>
+    <Editor />
   </div>
 </div>

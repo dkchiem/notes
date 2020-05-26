@@ -1,9 +1,9 @@
 <script>
-  export let categoryName, childNumber;
-  let isOpen, settings;
+  export let expanded, categoryName, childNumber;
+  let settings;
 
   function categoryToggled() {
-    isOpen = !isOpen;
+    expanded = !expanded;
   }
 
   function settingsToggled() {
@@ -13,6 +13,12 @@
 </script>
 
 <style lang="scss">
+  @import 'src/styles/_colors.scss';
+
+  li {
+    list-style: none;
+  }
+
   .item {
     user-select: none;
     width: calc(100% - var(--width-substact));
@@ -23,6 +29,7 @@
     white-space: nowrap;
     display: flex;
     align-items: center;
+    color: $theme-gray;
     cursor: pointer;
     * {
       margin: 0 5px;
@@ -55,7 +62,7 @@
     class="item"
     on:click={categoryToggled}
     style="--width-substact: {childNumber * 15}px">
-    {#if isOpen}
+    {#if expanded}
       <svg
         aria-hidden="true"
         focusable="false"
@@ -171,7 +178,7 @@
     </svg>
   </div>
 
-  <ul hidden={!isOpen}>
+  <ul hidden={!expanded}>
     <slot />
   </ul>
 
