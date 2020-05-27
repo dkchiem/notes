@@ -57,6 +57,20 @@
   }
 </style>
 
+{#if expanded}
+  <ul>
+    {#each files as file}
+      <li>
+        {#if file.type === 'folder'}
+          <svelte:self {...file} />
+        {:else}
+          <File {...file} />
+        {/if}
+      </li>
+    {/each}
+  </ul>
+{/if}
+
 <li>
   <div
     class="item"

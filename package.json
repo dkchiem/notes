@@ -29,6 +29,7 @@
     "@emmetio/codemirror-plugin": "^1.0.3",
     "codemirror": "^5.54.0",
     "firebase": "^7.14.4",
+    "github-markdown-css": "^4.0.0",
     "highlight.js": "^10.0.3",
     "marked": "^1.1.0",
     "svelte-router-spa": "^5.6.0",

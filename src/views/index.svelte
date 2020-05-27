@@ -38,7 +38,7 @@
     <CategoriesList userID="UR2rQONWehG0QytSsAy4" />
   </Bar>
   <Bar title="Notes" barColor="#303030" position="1">
-    <NoteItem>Test</NoteItem>
+    <NoteItem>Test hey heyh hey</NoteItem>
     <NoteItem>Test</NoteItem>
     <NoteItem>Test</NoteItem>
     <NoteItem>Test</NoteItem>

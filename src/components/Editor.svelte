@@ -7,6 +7,7 @@
   import CodeMirror from 'codemirror';
   import emmet from '@emmetio/codemirror-plugin';
   import '../styles/codemirror.css';
+  import 'github-markdown-css/github-markdown.css';
 
   let html = '';
   let markdownField;
@@ -17,15 +18,17 @@
 
     editor = CodeMirror.fromTextArea(markdownField, {
       lineNumbers: true,
-      mode: 'text/html',
+      lineWrapping: true,
+      mode: 'markdown',
       extraKeys: {
         Tab: 'emmetExpandAbbreviation',
         Esc: 'emmetResetAbbreviation',
         Enter: 'emmetInsertLineBreak',
       },
     });
+
     markdownField = editor.getInputField();
-    markdownField.addEventListener('keydown', makeMarkdown, true);
+    markdownField.addEventListener('keyup', makeMarkdown, true);
   });
 
   // hljs.registerLanguage('markdown', langMarkdown);
@@ -62,9 +65,18 @@
         background-color: white;
         border: $border;
         border-radius: 10px;
-        padding: 20px;
         min-width: 1fr;
-        overflow: scroll;
+        position: relative;
+        #result-content {
+          padding: 20px;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 100%;
+          overflow: scroll;
+        }
       }
       #markdown {
         background-color: white;
@@ -76,36 +88,35 @@
         font-size: 1rem;
         outline: none;
         font-family: monospace;
-        overflow: scroll;
       }
     }
-  }
 
-  // [contenteditable][placeholder]:empty:before {
-  //   content: attr(placeholder);
-  //   position: absolute;
-  //   color: gray;
-  //   background-color: transparent;
-  // }
+    .codeArea {
+      margin-top: 0;
+      height: 100%;
+      position: relative;
+      max-height: 100%;
+    }
+  }
 </style>
 
 <div id="container">
   <input id="title" type="text" placeholder="Title" />
   <div id="content">
-    <!-- <div
-      id="markdown"
-      contenteditable="true"
-      on:input={makeMarkdown}
-      bind:this={markdownField}
-      placeholder="Markdown" /> -->
-    <textarea
-      name="markdown"
-      id="markdown"
-      cols="30"
-      rows="10"
-      bind:this={markdownField} />
-    <div id="result">
-      {@html html}
+
+    <div class="codeArea">
+      <textarea
+        name="markdown"
+        id="markdown"
+        cols="30"
+        rows="10"
+        bind:this={markdownField} />
+    </div>
+
+    <div id="result" class="markdown-body">
+      <div id="result-content">
+        {@html html}
+      </div>
     </div>
   </div>
 </div>
