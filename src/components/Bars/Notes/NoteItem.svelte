@@ -26,7 +26,7 @@
   }
 </style>
 
-<div class="item">
+<div class="item" on:click>
   <svg
     aria-hidden="true"
     focusable="false"

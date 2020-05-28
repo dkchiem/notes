@@ -57,6 +57,7 @@
   }
 </style>
 
+<!-- 
 {#if expanded}
   <ul>
     {#each files as file}
@@ -69,7 +70,7 @@
       </li>
     {/each}
   </ul>
-{/if}
+{/if} -->
 
 <li>
   <div

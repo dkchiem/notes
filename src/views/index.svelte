@@ -8,10 +8,21 @@
 
   import firebase from 'firebase/app';
 
-  const user = firebase.auth().currentUser;
-  let uid;
+  import { onMount } from 'svelte';
 
-  user && (uid = user.uid);
+  const user = firebase.auth().currentUser;
+  let uid, title, markdown;
+
+  onMount(() => {
+    user && (uid = user.uid);
+  });
+
+  function selectNote() {
+    console.log('Ok');
+    title = 'Hello';
+    markdown = 'HelloWorld!';
+    console.log(markdown);
+  }
 </script>
 
 <style lang="scss">
@@ -38,7 +49,7 @@
     <CategoriesList userID="UR2rQONWehG0QytSsAy4" />
   </Bar>
   <Bar title="Notes" barColor="#303030" position="1">
-    <NoteItem>Test hey heyh hey</NoteItem>
+    <NoteItem on:click={selectNote}>Test hey heyh hey</NoteItem>
     <NoteItem>Test</NoteItem>
     <NoteItem>Test</NoteItem>
     <NoteItem>Test</NoteItem>
@@ -46,6 +57,6 @@
   </Bar>
 
   <div id="content-box">
-    <Editor />
+    <Editor {title} {markdown} />
   </div>
 </div>

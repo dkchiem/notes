@@ -1,40 +1,40 @@
 <script>
   import marked from 'marked';
-  import hljs from 'highlight.js/lib/core';
-  import langMarkdown from 'highlight.js/lib/languages/markdown';
-  import { onMount } from 'svelte';
-
   import CodeMirror from 'codemirror';
-  import emmet from '@emmetio/codemirror-plugin';
+  import { onMount } from 'svelte';
+  import hljs from 'highlight.js';
   import '../styles/codemirror.css';
   import 'github-markdown-css/github-markdown.css';
+
+  export let title, markdown;
 
   let html = '';
   let markdownField;
   let editor;
 
   onMount(() => {
-    emmet(CodeMirror);
-
     editor = CodeMirror.fromTextArea(markdownField, {
+      mode: 'markdown',
       lineNumbers: true,
       lineWrapping: true,
-      mode: 'markdown',
-      extraKeys: {
-        Tab: 'emmetExpandAbbreviation',
-        Esc: 'emmetResetAbbreviation',
-        Enter: 'emmetInsertLineBreak',
-      },
+      highlightFormatting: true,
     });
 
     markdownField = editor.getInputField();
     markdownField.addEventListener('keyup', makeMarkdown, true);
+    makeMarkdown();
+    console.log(CodeMirror.modes);
   });
 
   // hljs.registerLanguage('markdown', langMarkdown);
 
   function makeMarkdown() {
     const textEntered = editor.getValue();
+    marked.setOptions({
+      highlight: function(code, lang) {
+        return hljs.highlight(lang, code).value;
+      },
+    });
     html = marked(textEntered);
   }
 </script>
@@ -101,7 +101,7 @@
 </style>
 
 <div id="container">
-  <input id="title" type="text" placeholder="Title" />
+  <input id="title" type="text" placeholder="Title" bind:value={title} />
   <div id="content">
 
     <div class="codeArea">
