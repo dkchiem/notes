@@ -18,11 +18,44 @@
   });
 
   function selectNote() {
-    console.log('Ok');
     title = 'Hello';
     markdown = 'HelloWorld!';
     console.log(markdown);
   }
+
+  let root = [
+    {
+      type: 'folder',
+      name: 'Important work stuff',
+      files: [{ type: 'file', name: 'quarterly-results.xlsx' }],
+    },
+    {
+      type: 'folder',
+      name: 'Animal GIFs',
+      files: [
+        {
+          type: 'folder',
+          name: 'Dogs',
+          files: [
+            { type: 'file', name: 'treadmill.gif' },
+            { type: 'file', name: 'rope-jumping.gif' },
+          ],
+        },
+        {
+          type: 'folder',
+          name: 'Goats',
+          files: [
+            { type: 'file', name: 'parkour.gif' },
+            { type: 'file', name: 'rampage.gif' },
+          ],
+        },
+        { type: 'file', name: 'cat-roomba.gif' },
+        { type: 'file', name: 'duck-shuffle.gif' },
+        { type: 'file', name: 'monkey-on-a-pig.gif' },
+      ],
+    },
+    { type: 'file', name: 'TODO.md' },
+  ];
 </script>
 
 <style lang="scss">
@@ -46,8 +79,9 @@
 <div id="container">
 
   <Bar title="Categories" barColor="#52de97" position="0">
-    <CategoriesList userID="UR2rQONWehG0QytSsAy4" />
+    <CategoriesList name="Home" files={root} expanded />
   </Bar>
+
   <Bar title="Notes" barColor="#303030" position="1">
     <NoteItem on:click={selectNote}>Test hey heyh hey</NoteItem>
     <NoteItem>Test</NoteItem>
