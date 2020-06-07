@@ -44,16 +44,19 @@
       margin: 0 5px;
     }
     .plus {
-      height: 0.75rem;
+      width: 0.75rem;
+      min-width: 0.75rem;
     }
     .folder {
-      height: 1.3rem;
+      width: 1.3rem;
+      min-width: 1.3rem;
     }
     #space {
       flex: 1;
     }
     #settings {
-      height: 1.3rem;
+      width: 1.3rem;
+      min-width: 1.3rem;
       transition: transform 0.5s ease;
       &:hover {
         transform: rotate(180deg);
@@ -61,7 +64,10 @@
     }
     #grip-lines {
       cursor: grab;
-      height: 1.3rem;
+      width: 1.3rem;
+      min-width: 1.3rem;
+    }
+    span {
     }
   }
 
@@ -193,12 +199,10 @@
   <ul>
     {#if categories}
       {#each categories as category}
-        <svelte:self {...category} />
+        <li>
+          <svelte:self {...category} />
+        </li>
       {/each}
-      <!-- {:else}
-      {() => {
-        nochild = true;
-      }} -->
     {/if}
   </ul>
 {/if}

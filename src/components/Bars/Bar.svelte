@@ -20,10 +20,11 @@
   $close-btn-pos: var(--close-btn-pos);
   $closed-width: var(--closed-width);
   $content-left-margin: var(--content-left-margin);
+  $bar-width: 400px;
 
   @keyframes barAnimateOut {
     25% {
-      width: calc(20% + 10px);
+      width: calc(#{$bar-width} + 10px);
     }
     100% {
       width: $closed-width;
@@ -35,16 +36,16 @@
       width: $closed-width;
     }
     75% {
-      width: calc(20% + 10px);
+      width: calc(#{$bar-width} + 10px);
     }
     100% {
-      width: 20%;
+      width: $bar-width;
     }
   }
 
   #bar {
     background-color: $bar-color;
-    width: 20%;
+    width: $bar-width;
     height: 100%;
     padding-top: 10px;
     z-index: $z-index;

@@ -3,8 +3,7 @@
   import Editor from '@components/Editor.svelte';
   import Bar from '@components/Bars/Bar.svelte';
   import NoteItem from '@components/Bars/Notes/NoteItem.svelte';
-  import CategoryItem from '@components/Bars/Categories/CategoryItem.svelte';
-  import CategoriesList from '@components/Bars/Categories/CategoriesList.svelte';
+  import Category from '@components/Bars/Category.svelte';
 
   import firebase from 'firebase/app';
 
@@ -27,16 +26,16 @@
     {
       type: 'folder',
       name: 'Important work stuff',
-      files: [{ type: 'file', name: 'quarterly-results.xlsx' }],
+      categories: [{ type: 'file', name: 'quarterly-results.xlsx' }],
     },
     {
       type: 'folder',
       name: 'Animal GIFs',
-      files: [
+      categories: [
         {
           type: 'folder',
           name: 'Dogs',
-          files: [
+          categories: [
             { type: 'file', name: 'treadmill.gif' },
             { type: 'file', name: 'rope-jumping.gif' },
           ],
@@ -44,7 +43,7 @@
         {
           type: 'folder',
           name: 'Goats',
-          files: [
+          categories: [
             { type: 'file', name: 'parkour.gif' },
             { type: 'file', name: 'rampage.gif' },
           ],
@@ -79,7 +78,7 @@
 <div id="container">
 
   <Bar title="Categories" barColor="#52de97" position="0">
-    <CategoriesList name="Home" files={root} expanded />
+    <Category name="Home" categories={root} />
   </Bar>
 
   <Bar title="Notes" barColor="#303030" position="1">
