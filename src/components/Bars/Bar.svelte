@@ -47,7 +47,7 @@
     background-color: $bar-color;
     width: $bar-width;
     height: 100%;
-    padding-top: 10px;
+    padding: 10px 0;
     z-index: $z-index;
     position: relative;
     animation-delay: 0.1s;
@@ -63,15 +63,19 @@
 
     #content {
       overflow: hidden;
-      margin: 10px 20px;
+      margin: 0 20px;
       display: flex;
       flex-direction: column;
       padding-left: $content-left-margin;
+      height: 100%;
       #bar-header {
         height: 50px;
         margin-bottom: 10px;
         display: flex;
         align-items: center;
+      }
+      #items {
+        flex: 1;
       }
     }
 
@@ -118,7 +122,9 @@
       <h3>{title}</h3>
     </div>
 
-    <slot />
+    <div id="items">
+      <slot />
+    </div>
 
   </div>
 

@@ -1,60 +1,56 @@
 <script>
-  import Header from '@components/Header.svelte';
+  import Header from '@components/Header/Header.svelte';
   import Editor from '@components/Editor.svelte';
   import Bar from '@components/Bars/Bar.svelte';
-  import NoteItem from '@components/Bars/Notes/NoteItem.svelte';
+  import Note from '@components/Bars/Note.svelte';
   import Category from '@components/Bars/Category.svelte';
 
-  import firebase from 'firebase/app';
+  import { getCategories, getNotes } from '@helpers/database.js';
 
+  import firebase from 'firebase/app';
+  import { Doc, Collection } from 'sveltefire';
   import { onMount } from 'svelte';
 
   const user = firebase.auth().currentUser;
-  let uid, title, markdown;
+  let uid = 'UR2rQONWehG0QytSsAy4',
+    title,
+    markdown,
+    categories,
+    notes = [],
+    category;
+
+  const selectCategory = async (categoryID) => {
+    console.log(categoryID);
+    if (categoryID) {
+      notes = await getNotes(uid, categoryID);
+    }
+  };
+
+  const selectNote = async (noteName) => {
+    title = noteName;
+    markdown = '# HelloWorld!';
+  };
 
   onMount(() => {
-    user && (uid = user.uid);
+    //user && (uid = user.uid);
+    main();
   });
 
-  function selectNote() {
-    title = 'Hello';
-    markdown = 'HelloWorld!';
-    console.log(markdown);
+  async function main() {
+    categories = await getCategories(uid);
   }
 
-  let root = [
-    {
-      type: 'folder',
-      name: 'Important work stuff',
-      categories: [{ type: 'file', name: 'quarterly-results.xlsx' }],
-    },
-    {
-      type: 'folder',
-      name: 'Animal GIFs',
-      categories: [
-        {
-          type: 'folder',
-          name: 'Dogs',
-          categories: [
-            { type: 'file', name: 'treadmill.gif' },
-            { type: 'file', name: 'rope-jumping.gif' },
-          ],
-        },
-        {
-          type: 'folder',
-          name: 'Goats',
-          categories: [
-            { type: 'file', name: 'parkour.gif' },
-            { type: 'file', name: 'rampage.gif' },
-          ],
-        },
-        { type: 'file', name: 'cat-roomba.gif' },
-        { type: 'file', name: 'duck-shuffle.gif' },
-        { type: 'file', name: 'monkey-on-a-pig.gif' },
-      ],
-    },
-    { type: 'file', name: 'TODO.md' },
-  ];
+  let treeDepth = 0;
+
+  function len(arr) {
+    var count = 0;
+    for (var k in arr) {
+      if (arr.hasOwnProperty(k)) {
+        count++;
+      }
+    }
+    return count;
+  }
 </script>
 
 <style lang="scss">
@@ -78,15 +74,13 @@
 <div id="container">
 
   <Bar title="Categories" barColor="#52de97" position="0">
-    <Category name="Home" categories={root} />
+    <Category {categories} name="Home" expanded callback={selectCategory} />
   </Bar>
 
   <Bar title="Notes" barColor="#303030" position="1">
-    <NoteItem on:click={selectNote}>Test hey heyh hey</NoteItem>
-    <NoteItem>Test</NoteItem>
-    <NoteItem>Test</NoteItem>
-    <NoteItem>Test</NoteItem>
-    <NoteItem>Test</NoteItem>
+    {#each notes as note}
+      <Note on:click={selectNote} {...note} callback={selectNote} />
+    {/each}
   </Bar>
 
   <div id="content-box">

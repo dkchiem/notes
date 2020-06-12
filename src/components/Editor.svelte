@@ -6,7 +6,8 @@
   import '../styles/codemirror.css';
   import 'github-markdown-css/github-markdown.css';
 
-  export let title, markdown;
+  export let title = '',
+    markdown = '';
 
   let html = '';
   let markdownField;
@@ -22,9 +23,14 @@
 
     markdownField = editor.getInputField();
     markdownField.addEventListener('keyup', makeMarkdown, true);
-    makeMarkdown();
-    console.log(CodeMirror.modes);
+    //markdown && editor.getDoc().setValue(markdown);
+    //console.log(CodeMirror.modes);
   });
+
+  $: if (markdown && editor) {
+    editor.getDoc().setValue(markdown);
+    makeMarkdown();
+  }
 
   // hljs.registerLanguage('markdown', langMarkdown);
 
@@ -54,6 +60,7 @@
       font-size: 1.5rem;
       margin-bottom: 10px;
       border-radius: 10px;
+      outline: none;
     }
 
     #content {

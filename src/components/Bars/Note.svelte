@@ -1,19 +1,28 @@
+<script>
+  import { fly } from 'svelte/transition';
+
+  export let name, callback;
+
+  const noteToggled = () => {
+    callback(name);
+  };
+</script>
+
 <style lang="scss">
   @import 'src/styles/_colors.scss';
   @import 'src/styles/_variables.scss';
 
   .item {
-    width: 100%;
+    align-items: center;
     background-color: white;
     border-radius: 10px;
-    padding: 10px 20px;
-    //border: $border;
     color: $theme-gray;
     cursor: pointer;
     display: flex;
-    align-items: center;
     margin-bottom: 5px;
+    padding: 10px 20px;
     transition: 0.3s ease;
+    width: 100%;
     svg {
       height: 1.2rem;
       margin-right: 10px;
@@ -26,7 +35,11 @@
   }
 </style>
 
-<div class="item" on:click>
+<div
+  class="item"
+  on:click
+  transition:fly={{ y: 20, duration: 500 }}
+  on:click={noteToggled}>
   <svg
     aria-hidden="true"
     focusable="false"
@@ -42,7 +55,5 @@
       10.7 24 24 24h264V344c0-13.2 10.8-24 24-24zm129 55l-98 98c-4.5 4.5-10.6
       7-17 7h-6V352h128v6.1c0 6.3-2.5 12.4-7 16.9z" />
   </svg>
-  <span>
-    <slot />
-  </span>
+  <span>{name}</span>
 </div>

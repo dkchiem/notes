@@ -1,6 +1,7 @@
 <script>
-  import Menu from './Menu/Menu.svelte';
-  import MenuItem from './Menu/MenuItem.svelte';
+  import Menu from '@components/Menu/Menu.svelte';
+  import MenuItem from '@components/Menu/MenuItem.svelte';
+  import ItemBar from '@components/Header/ItemBar.svelte';
 
   let showMenu, stayOpen;
 
@@ -34,10 +35,12 @@
     display: flex;
     align-items: center;
     display: flex;
-    border-bottom: solid 1px #979797;
     h1 {
       user-select: none;
       font-family: 'Unica One', cursive;
+    }
+    #space {
+      flex: 1;
     }
     #menu-btn {
       margin-left: auto;
@@ -59,7 +62,9 @@
 
 <header>
   <h1>Notes</h1>
-  <svg
+  <div id="space" />
+  <ItemBar />
+  <!-- <svg
     id="menu-btn"
     aria-hidden="true"
     focusable="false"
@@ -85,13 +90,13 @@
       72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2
       72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2
       72-72-32.2-72-72-72z" />
-  </svg>
-  <div id="menu" class:showMenu>
+  </svg> -->
+  <!-- <div id="menu" class:showMenu>
     <Menu>
       <MenuItem>Hello</MenuItem>
       <MenuItem>test</MenuItem>
       <MenuItem>ha</MenuItem>
       <MenuItem>Log out</MenuItem>
     </Menu>
-  </div>
+  </div> -->
 </header>

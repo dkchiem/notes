@@ -1,15 +1,25 @@
 <script>
-  export let expanded, name, categories;
-  let settings, nochild;
+  import { fly } from 'svelte/transition';
 
-  !categories && (nochild = true);
+  export let expanded = false,
+    name,
+    categories,
+    parent,
+    id,
+    callback;
+  let settings, nochild, categoryId, category;
 
-  function categoryToggled() {
-    if (categories) expanded = !expanded;
-    else {
-      nochild = true;
-    }
+  main();
+
+  async function main() {
+    await categories;
+    categories && (nochild = categories.length == 0 ? true : false);
   }
+
+  const categoryToggled = () => {
+    categories && (expanded = !expanded);
+    callback(id);
+  };
 
   function settingsToggled() {
     console.log('settings');
@@ -23,6 +33,7 @@
   ul {
     list-style: none;
     padding-left: 0.5em;
+    transition: 0.3s ease;
   }
 
   li {
@@ -30,16 +41,22 @@
   }
 
   .item {
-    user-select: none;
-    width: 100%;
+    align-items: center;
     background-color: white;
     border-radius: 5px;
-    padding: 10px;
-    margin: 5px 0 5px auto;
-    display: flex;
-    align-items: center;
     color: $theme-gray;
     cursor: pointer;
+    display: flex;
+    margin: 5px 0 5px auto;
+    padding: 10px;
+    transition: 0.3s ease;
+    user-select: none;
+    width: 100%;
+    &:hover {
+      //transform: translateX(-5px);
+      padding: 12px 10px;
+      background-color: $theme-light-gray;
+    }
     * {
       margin: 0 5px;
     }
@@ -67,8 +84,6 @@
       width: 1.3rem;
       min-width: 1.3rem;
     }
-    span {
-    }
   }
 
   .nochild {
@@ -78,7 +93,12 @@
   }
 </style>
 
-<div class="item" on:click={categoryToggled} class:nochild>
+<div
+  class="item"
+  on:click={categoryToggled}
+  class:nochild
+  on:click
+  in:fly={{ y: 20, duration: 500 }}>
   {#if expanded}
     <svg
       aria-hidden="true"
@@ -200,7 +220,7 @@
     {#if categories}
       {#each categories as category}
         <li>
-          <svelte:self {...category} />
+          <svelte:self {...category} {callback} on:click />
         </li>
       {/each}
     {/if}
