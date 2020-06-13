@@ -6,7 +6,6 @@
   import Category from '@components/Bars/Category.svelte';
 
   import { getCategories, getNotes } from '@helpers/database.js';
-
   import firebase from 'firebase/app';
   import { Doc, Collection } from 'sveltefire';
   import { onMount } from 'svelte';
@@ -26,11 +25,6 @@
     }
   };
 
-  const selectNote = async (noteName) => {
-    title = noteName;
-    markdown = '# HelloWorld!';
-  };
-
   onMount(() => {
     //user && (uid = user.uid);
     main();
@@ -40,16 +34,10 @@
     categories = await getCategories(uid);
   }
 
-  let treeDepth = 0;
-
-  function len(arr) {
-    var count = 0;
-    for (var k in arr) {
-      if (arr.hasOwnProperty(k)) {
-        count++;
-      }
-    }
-    return count;
+  async function selectNote(event) {
+    const data = event.detail;
+    title = data.name;
+    markdown = '# HelloWorld!';
   }
 </script>
 
@@ -61,6 +49,10 @@
     display: flex;
     height: 100vh;
     padding-top: $header-height;
+    #no-notes {
+      position: absolute;
+      top: 0;
+    }
     #content-box {
       width: auto;
       display: block;
@@ -74,12 +66,14 @@
 <div id="container">
 
   <Bar title="Categories" barColor="#52de97" position="0">
-    <Category {categories} name="Home" expanded callback={selectCategory} />
+    <Category {categories} name="Home" callback={selectCategory} expanded />
   </Bar>
 
   <Bar title="Notes" barColor="#303030" position="1">
     {#each notes as note}
-      <Note on:click={selectNote} {...note} callback={selectNote} />
+      <Note {...note} on:noteToggled={selectNote} />
+    {:else}
+      <span id="no-notes">No notes found</span>
     {/each}
   </Bar>
 

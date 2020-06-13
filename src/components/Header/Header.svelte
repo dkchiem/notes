@@ -2,6 +2,9 @@
   import Menu from '@components/Menu/Menu.svelte';
   import MenuItem from '@components/Menu/MenuItem.svelte';
   import ItemBar from '@components/Header/ItemBar.svelte';
+  import Item from '@components/Header/Item.svelte';
+
+  import itemBarItems from '@config/itemBarItems.js';
 
   let showMenu, stayOpen;
 
@@ -37,7 +40,7 @@
     display: flex;
     h1 {
       user-select: none;
-      font-family: 'Unica One', cursive;
+      font-family: 'Unica One', serif;
     }
     #space {
       flex: 1;
@@ -63,40 +66,9 @@
 <header>
   <h1>Notes</h1>
   <div id="space" />
-  <ItemBar />
-  <!-- <svg
-    id="menu-btn"
-    aria-hidden="true"
-    focusable="false"
-    data-prefix="fas"
-    data-icon="ellipsis-h"
-    class="svg-inline--fa fa-ellipsis-h fa-w-16"
-    role="img"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 512 512"
-    on:click={() => {
-      stayOpen = !stayOpen;
-      showMenu = stayOpen;
-    }}
-    on:mouseover={() => {
-      !stayOpen && (showMenu = true);
-    }}
-    on:mouseleave={() => {
-      !stayOpen && (showMenu = false);
-    }}>
-    <path
-      fill="currentColor"
-      d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72
-      72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2
-      72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2
-      72-72-32.2-72-72-72z" />
-  </svg> -->
-  <!-- <div id="menu" class:showMenu>
-    <Menu>
-      <MenuItem>Hello</MenuItem>
-      <MenuItem>test</MenuItem>
-      <MenuItem>ha</MenuItem>
-      <MenuItem>Log out</MenuItem>
-    </Menu>
-  </div> -->
+  <ItemBar>
+    {#each itemBarItems as item}
+      <Item {...item} />
+    {/each}
+  </ItemBar>
 </header>

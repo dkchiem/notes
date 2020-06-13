@@ -18,18 +18,19 @@ function getCategories(userID) {
           });
           index++;
           if (index === querySnapshot.size - 1) {
-            const categories = convert(dataArray);
+            const categories = convertCategories(dataArray);
             resolve(categories);
           }
         });
       })
       .catch((error) => {
         console.log('Error getting documents: ', error);
+        reject();
       });
   });
 }
 
-function convert(array) {
+function convertCategories(array) {
   var map = {};
   for (var i = 0; i < array.length; i++) {
     var obj = array[i];
@@ -57,7 +58,7 @@ function convert(array) {
   return map['-'].categories;
 }
 
-function getNotes(userID, docID) {
+function getNotes(userID, categoryID) {
   return new Promise((resolve, reject) => {
     const db = firebase.firestore();
     let dataArray = [];
@@ -65,7 +66,7 @@ function getNotes(userID, docID) {
     db.collection('users')
       .doc(userID)
       .collection('categories')
-      .doc(docID)
+      .doc(categoryID)
       .collection('notes')
       .get()
       .then((querySnapshot) => {
@@ -84,8 +85,32 @@ function getNotes(userID, docID) {
       })
       .catch((error) => {
         console.log('Error getting documents: ', error);
+        reject();
       });
   });
 }
 
-export { getCategories, getNotes };
+function saveNote(userID, categoryID, noteID, name, markdown) {
+  return new Promise((resolve, reject) => {
+    const db = firebase.firestore();
+    db.collection('users')
+      .doc(userID)
+      .collection('categories')
+      .doc(categoryID)
+      .collection('notes')
+      .doc(noteID)
+      .set({
+        name: name,
+        markdown: markdown,
+      })
+      .then(() => {
+        resolve('Saved successfully');
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+        reject();
+      });
+  });
+}
+
+export { getCategories, getNotes, saveNote };

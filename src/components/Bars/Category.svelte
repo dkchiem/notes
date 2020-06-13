@@ -7,7 +7,7 @@
     parent,
     id,
     callback;
-  let settings, nochild, categoryId, category;
+  let settings, nochild, categoryId;
 
   main();
 
@@ -24,6 +24,40 @@
   function settingsToggled() {
     console.log('settings');
     settings = !settings;
+  }
+
+  // Drag
+  function categoryDragStart() {
+    setTimeout(() => {
+      this.style.display = 'none';
+      console.log(id);
+    }, 0);
+  }
+
+  function categoryDragEnd() {
+    setTimeout(() => {
+      this.style.display = null;
+      this.style.backgroundColor = null;
+    }, 0);
+  }
+
+  function categoryDragEnter(e) {
+    e.preventDefault();
+    this.style.backgroundColor = '#eeeeee';
+  }
+
+  function categoryDragOver(e) {
+    e.preventDefault();
+  }
+
+  function categoryDragLeave() {
+    this.style.backgroundColor = null;
+  }
+
+  function categoryDrop() {
+    //console.log(this);
+    this.style.backgroundColor = null;
+    console.log(id);
   }
 </script>
 
@@ -53,8 +87,6 @@
     user-select: none;
     width: 100%;
     &:hover {
-      //transform: translateX(-5px);
-      padding: 12px 10px;
       background-color: $theme-light-gray;
     }
     * {
@@ -98,7 +130,14 @@
   on:click={categoryToggled}
   class:nochild
   on:click
-  in:fly={{ y: 20, duration: 500 }}>
+  in:fly={{ y: 20, duration: 500 }}
+  draggable="true"
+  on:dragstart={categoryDragStart}
+  on:dragend={categoryDragEnd}
+  on:dragenter={categoryDragEnter}
+  on:dragleave={categoryDragLeave}
+  on:dragover={categoryDragOver}
+  on:drop={categoryDrop}>
   {#if expanded}
     <svg
       aria-hidden="true"

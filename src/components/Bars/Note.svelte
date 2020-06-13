@@ -1,11 +1,16 @@
 <script>
   import { fly } from 'svelte/transition';
+  import { createEventDispatcher } from 'svelte';
 
-  export let name, callback;
+  const dispatch = createEventDispatcher();
 
-  const noteToggled = () => {
-    callback(name);
-  };
+  export let name;
+
+  function noteToggled() {
+    dispatch('noteToggled', {
+      name: name,
+    });
+  }
 </script>
 
 <style lang="scss">
@@ -37,7 +42,6 @@
 
 <div
   class="item"
-  on:click
   transition:fly={{ y: 20, duration: 500 }}
   on:click={noteToggled}>
   <svg

@@ -76,6 +76,7 @@
       }
       #items {
         flex: 1;
+        position: relative;
       }
     }
 
