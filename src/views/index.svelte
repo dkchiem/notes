@@ -6,13 +6,13 @@
   import Category from '@components/Bars/Category.svelte';
 
   import { getCategories, getNotes } from '@helpers/database.js';
+  import { userID, getUid } from '@helpers/user.js';
   import firebase from 'firebase/app';
   import { Doc, Collection } from 'sveltefire';
   import { onMount } from 'svelte';
 
   const user = firebase.auth().currentUser;
-  let uid = 'UR2rQONWehG0QytSsAy4',
-    title,
+  let title,
     markdown,
     categories,
     notes = [],
@@ -21,17 +21,18 @@
   const selectCategory = async (categoryID) => {
     console.log(categoryID);
     if (categoryID) {
-      notes = await getNotes(uid, categoryID);
+      notes = await getNotes(getUid(), categoryID);
     }
   };
 
   onMount(() => {
-    //user && (uid = user.uid);
+    userID.set('UR2rQONWehG0QytSsAy4');
+    console.log(getUid());
     main();
   });
 
   async function main() {
-    categories = await getCategories(uid);
+    categories = await getCategories(getUid());
   }
 
   async function selectNote(event) {

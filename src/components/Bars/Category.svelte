@@ -1,5 +1,11 @@
 <script>
   import { fly } from 'svelte/transition';
+  import {
+    destinationCategory,
+    initalCategory,
+    changeParent,
+  } from '@helpers/category.js';
+  import { getUid } from '@helpers/user.js';
 
   export let expanded = false,
     name,
@@ -30,7 +36,7 @@
   function categoryDragStart() {
     setTimeout(() => {
       this.style.display = 'none';
-      console.log(id);
+      initalCategory.set(id);
     }, 0);
   }
 
@@ -54,10 +60,10 @@
     this.style.backgroundColor = null;
   }
 
-  function categoryDrop() {
-    //console.log(this);
+  async function categoryDrop() {
     this.style.backgroundColor = null;
-    console.log(id);
+    destinationCategory.set(id);
+    await changeParent(getUid());
   }
 </script>
 
