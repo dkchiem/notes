@@ -1,7 +1,6 @@
 <script>
   import { Router } from 'svelte-router-spa';
   import firebase from 'firebase/app';
-  import { FirebaseApp } from 'sveltefire';
   import { routes } from './routes';
 
   import 'firebase/auth';
@@ -26,6 +25,4 @@
   <title>Notes</title>
 </svelte:head>
 
-<FirebaseApp {firebase}>
-  <Router {routes} />
-</FirebaseApp>
+<Router {routes} />

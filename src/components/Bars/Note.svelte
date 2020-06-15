@@ -21,7 +21,7 @@
     align-items: center;
     background-color: white;
     border-radius: 10px;
-    color: $theme-gray;
+    color: $color-gray;
     cursor: pointer;
     display: flex;
     margin-bottom: 5px;
@@ -35,7 +35,7 @@
     &:hover {
       transform: translateX(-5px);
       font-weight: bold;
-      background-color: $theme-light-gray;
+      background-color: $color-light-gray;
     }
   }
 </style>

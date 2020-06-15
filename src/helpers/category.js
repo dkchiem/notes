@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import firebase from 'firebase/app';
 
-export const category = writable([]);
+export const categorySelected = writable({});
 
 // Drag & drop
 export const destinationCategory = writable('');

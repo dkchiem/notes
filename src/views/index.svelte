@@ -4,26 +4,31 @@
   import Bar from '@components/Bars/Bar.svelte';
   import Note from '@components/Bars/Note.svelte';
   import Category from '@components/Bars/Category.svelte';
+  import Toolbar from '@components/Bars/Toolbar.svelte';
 
-  import { getCategories, getNotes } from '@helpers/database.js';
+  import {
+    getCategories,
+    getNotes,
+    categoriesStore,
+  } from '@helpers/database.js';
   import { userID, getUid } from '@helpers/user.js';
+  import { categorySelected } from '@helpers/category.js';
+
   import firebase from 'firebase/app';
-  import { Doc, Collection } from 'sveltefire';
   import { onMount } from 'svelte';
 
   const user = firebase.auth().currentUser;
   let title,
     markdown,
     categories,
-    notes = [],
-    category;
+    notes = [];
 
-  const selectCategory = async (categoryID) => {
-    console.log(categoryID);
-    if (categoryID) {
-      notes = await getNotes(getUid(), categoryID);
-    }
-  };
+  // const selectCategory = async (categoryID) => {
+  //   console.log(categoryID);
+  //   if (categoryID) {
+  //     notes = await getNotes(getUid(), categoryID);
+  //   }
+  // };
 
   onMount(() => {
     userID.set('UR2rQONWehG0QytSsAy4');
@@ -32,7 +37,16 @@
   });
 
   async function main() {
-    categories = await getCategories(getUid());
+    await getCategories(getUid());
+    categoriesStore.subscribe((c) => {
+      categories = c;
+    });
+    categorySelected.subscribe(async (c) => {
+      console.log(c);
+      if (c.id) {
+        notes = await getNotes(getUid(), c.id);
+      }
+    });
   }
 
   async function selectNote(event) {
@@ -67,7 +81,10 @@
 <div id="container">
 
   <Bar title="Categories" barColor="#52de97" position="0">
-    <Category {categories} name="Home" callback={selectCategory} expanded />
+    <div class="slot" slot="toolbar">
+      <Toolbar />
+    </div>
+    <Category {categories} name="Home" expanded />
   </Bar>
 
   <Bar title="Notes" barColor="#303030" position="1">

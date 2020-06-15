@@ -78,14 +78,14 @@
   }
 
   .field {
-    border-bottom: 2px dashed $theme-gray;
+    border-bottom: 2px dashed $color-gray;
     margin: 4rem auto 1rem;
     position: relative;
     width: 100%;
     transition: 0.5s;
     &::after {
       content: '';
-      background: $theme-green;
+      background: $color-green;
       display: block;
       height: 4px;
       position: relative;
@@ -114,7 +114,7 @@
     }
 
     .label {
-      color: $theme-gray;
+      color: $color-gray;
       font-size: 1.2rem;
       position: absolute;
       transform: translateY(-2rem);
@@ -135,12 +135,12 @@
       width: 100%;
       padding: 0.25rem 0;
       background: none;
-      color: $theme-gray;
+      color: $color-gray;
       font-size: 1.2em;
       font-weight: bold;
       transition: border 0.5s;
       &:disabled {
-        color: lighten($theme-gray, 50%);
+        color: lighten($color-gray, 50%);
       }
       &.emailInvalid {
         color: red;
@@ -161,11 +161,11 @@
     border-radius: 25px;
     border: none;
     color: white;
-    background-color: $theme-green;
+    background-color: $color-green;
     cursor: pointer;
     &:disabled {
       cursor: default;
-      background-color: lighten($theme-green, 20%);
+      background-color: lighten($color-green, 20%);
     }
   }
 
@@ -176,14 +176,14 @@
       text-align: center;
       font-size: 0.75rem;
       text-decoration: none;
-      color: $theme-gray;
+      color: $color-gray;
       &::after {
         content: '';
         position: relative;
         display: block;
         height: 1px;
         width: 100%;
-        background: $theme-green;
+        background: $color-green;
         transform: scaleX(0);
         transform-origin: 0%;
         transition: all 0.3s ease;

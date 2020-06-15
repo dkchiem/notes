@@ -4,28 +4,29 @@
     destinationCategory,
     initalCategory,
     changeParent,
+    categorySelected,
   } from '@helpers/category.js';
   import { getUid } from '@helpers/user.js';
+  import { getCategories } from '@helpers/database.js';
 
   export let expanded = false,
     name,
     categories,
     parent,
-    id,
-    callback;
-  let settings, nochild, categoryId;
+    id;
+  let settings, categoryId;
+  $: nochild = categories && (nochild = categories.length == 0 ? true : false);
 
   main();
 
   async function main() {
     await categories;
-    categories && (nochild = categories.length == 0 ? true : false);
   }
 
-  const categoryToggled = () => {
+  function categoryToggled() {
     categories && (expanded = !expanded);
-    callback(id);
-  };
+    categorySelected.set({ name: name, id: id });
+  }
 
   function settingsToggled() {
     console.log('settings');
@@ -62,8 +63,9 @@
 
   async function categoryDrop() {
     this.style.backgroundColor = null;
-    destinationCategory.set(id);
+    destinationCategory.set(id || '');
     await changeParent(getUid());
+    getCategories(getUid());
   }
 </script>
 
@@ -84,7 +86,7 @@
     align-items: center;
     background-color: white;
     border-radius: 5px;
-    color: $theme-gray;
+    color: $color-gray;
     cursor: pointer;
     display: flex;
     margin: 5px 0 5px auto;
@@ -93,7 +95,7 @@
     user-select: none;
     width: 100%;
     &:hover {
-      background-color: $theme-light-gray;
+      background-color: $color-light-gray;
     }
     * {
       margin: 0 5px;
@@ -135,7 +137,6 @@
   class="item"
   on:click={categoryToggled}
   class:nochild
-  on:click
   in:fly={{ y: 20, duration: 500 }}
   draggable="true"
   on:dragstart={categoryDragStart}
@@ -265,7 +266,7 @@
     {#if categories}
       {#each categories as category}
         <li>
-          <svelte:self {...category} {callback} on:click />
+          <svelte:self {...category} />
         </li>
       {/each}
     {/if}

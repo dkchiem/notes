@@ -1,6 +1,9 @@
+import { writable } from 'svelte/store';
 import firebase from 'firebase/app';
 
-function getCategories(userID) {
+export const categoriesStore = writable([]);
+
+export function getCategories(userID) {
   return new Promise((resolve, reject) => {
     const db = firebase.firestore();
     let dataArray = [];
@@ -18,8 +21,8 @@ function getCategories(userID) {
           });
           index++;
           if (index === querySnapshot.size - 1) {
-            const categories = convertCategories(dataArray);
-            resolve(categories);
+            categoriesStore.set(convertCategories(dataArray));
+            resolve();
           }
         });
       })
@@ -58,7 +61,7 @@ function convertCategories(array) {
   return map['-'].categories;
 }
 
-function getNotes(userID, categoryID) {
+export function getNotes(userID, categoryID) {
   return new Promise((resolve, reject) => {
     const db = firebase.firestore();
     let dataArray = [];
@@ -79,7 +82,6 @@ function getNotes(userID, categoryID) {
             }
           });
         } else {
-          console.log('No notes found!');
           resolve([]);
         }
       })
@@ -89,28 +91,3 @@ function getNotes(userID, categoryID) {
       });
   });
 }
-
-function saveNote(userID, categoryID, noteID, name, markdown) {
-  return new Promise((resolve, reject) => {
-    const db = firebase.firestore();
-    db.collection('users')
-      .doc(userID)
-      .collection('categories')
-      .doc(categoryID)
-      .collection('notes')
-      .doc(noteID)
-      .set({
-        name: name,
-        markdown: markdown,
-      })
-      .then(() => {
-        resolve('Saved successfully');
-      })
-      .catch((error) => {
-        console.log('Error getting documents: ', error);
-        reject();
-      });
-  });
-}
-
-export { getCategories, getNotes, saveNote };

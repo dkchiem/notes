@@ -39,7 +39,7 @@
   }
 
   #loader {
-    color: $theme-green;
+    color: $color-green;
     font-size: 15px;
     margin: 100px auto;
     width: 1rem;

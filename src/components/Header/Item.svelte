@@ -1,5 +1,16 @@
 <script>
+  import { createPopper } from '@popperjs/core';
+  import { onMount } from 'svelte';
+
   export let icon, viewBox, path;
+
+  let test;
+
+  // onMount(() => {
+  //   createPopper(this, test, {
+  //     placement: 'right',
+  //   });
+  // });
 </script>
 
 <style lang="scss">
@@ -7,7 +18,7 @@
 
   #item {
     align-items: center;
-    background-color: $theme-gray;
+    background-color: $color-gray;
     border-radius: 50%;
     color: white;
     display: flex;
@@ -40,3 +51,5 @@
     <path fill="currentColor" d={path} />
   </svg>
 </div>
+
+<!-- <div bind:this={test}>Hello</div> -->

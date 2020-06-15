@@ -8,6 +8,10 @@
 
 body {
   font-family: 'Montserrat', sans-serif;
-  color: $theme-gray;
-  background-color: $theme-light-gray;
+  color: $color-gray;
+  background-color: $color-light-gray;
+}
+
+.slot {
+  display: contents;
 }

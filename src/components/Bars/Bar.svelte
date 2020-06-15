@@ -1,4 +1,6 @@
 <script>
+  import Tool from '@components/Bars/Tool.svelte';
+
   export let title, barColor, position;
   const zIndex = 500 - position;
   const closeBtnPos = position == 0 ? '5px' : `${55 * position + 5}px`;
@@ -47,7 +49,7 @@
     background-color: $bar-color;
     width: $bar-width;
     height: 100%;
-    padding: 10px 0;
+    padding: 20px 0;
     z-index: $z-index;
     position: relative;
     animation-delay: 0.1s;
@@ -69,10 +71,10 @@
       padding-left: $content-left-margin;
       height: 100%;
       #bar-header {
-        height: 50px;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
+        margin-bottom: 5px;
+      }
+      #toolbar {
+        margin-bottom: 20px;
       }
       #items {
         flex: 1;
@@ -121,6 +123,10 @@
   <div id="content">
     <div id="bar-header">
       <h3>{title}</h3>
+    </div>
+
+    <div id="toolbar">
+      <slot name="toolbar" />
     </div>
 
     <div id="items">
