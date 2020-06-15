@@ -23,23 +23,18 @@ const routes = [
   {
     name: '/login',
     component: Login,
-    onlyIf: {
-      guard: () => {
-        return userIsLoggedIn ? false : true;
-      },
-      redirect: '/',
-    },
   },
   {
     name: '/signup',
     component: SignUp,
-    onlyIf: {
-      guard: () => {
-        return userIsLoggedIn ? false : true;
-      },
-      redirect: '/',
-    },
   },
 ];
+
+// onlyIf: {
+//   guard: () => {
+//     return userIsLoggedIn ? false : true;
+//   },
+//   redirect: '/',
+// },
 
 export { routes };

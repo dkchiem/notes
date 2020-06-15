@@ -35,6 +35,7 @@
     "svelte-router-spa": "^5.6.0"
   },
   "scripts": {
+    "deploy": "npm run build && firebase deploy",
     "build": "rollup -c",
     "autobuild": "rollup -c -w",
     "dev": "run-p start:dev autobuild openBrowser",

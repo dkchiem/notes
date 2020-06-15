@@ -42,6 +42,10 @@
       user-select: none;
       font-family: 'Unica One', serif;
     }
+    #logo {
+      height: 75%;
+      margin-right: 10px;
+    }
     #space {
       flex: 1;
     }
@@ -64,6 +68,7 @@
 </style>
 
 <header>
+  <img id="logo" src="../../assets/logo.png" alt="logo" />
   <h1>Notes</h1>
   <div id="space" />
   <ItemBar>

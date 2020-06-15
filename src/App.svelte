@@ -1,7 +1,8 @@
 <script>
   import { Router } from 'svelte-router-spa';
-  import firebase from 'firebase/app';
   import { routes } from './routes';
+  import firebase from 'firebase/app';
+  import 'firebase/performance';
 
   import 'firebase/auth';
   import 'firebase/firestore';
@@ -19,6 +20,8 @@
   };
 
   firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  const perf = firebase.performance();
 </script>
 
 <svelte:head>
