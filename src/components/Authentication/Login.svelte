@@ -142,9 +142,9 @@
       &:disabled {
         color: lighten($color-gray, 50%);
       }
-      &.emailInvalid {
-        color: red;
-      }
+      // &.emailInvalid {
+      //   color: red;
+      // }
     }
   }
 

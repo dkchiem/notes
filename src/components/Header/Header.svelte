@@ -1,6 +1,4 @@
 <script>
-  import Menu from '@components/Menu/Menu.svelte';
-  import MenuItem from '@components/Menu/MenuItem.svelte';
   import ItemBar from '@components/Header/ItemBar.svelte';
   import Item from '@components/Header/Item.svelte';
 
@@ -48,21 +46,6 @@
     }
     #space {
       flex: 1;
-    }
-    #menu-btn {
-      margin-left: auto;
-      height: 4rem;
-      cursor: pointer;
-      padding: 1rem;
-    }
-    #menu {
-      opacity: 0;
-      visibility: 0;
-      transition: 0.3s;
-      &.showMenu {
-        opacity: 1;
-        visibility: 1;
-      }
     }
   }
 </style>

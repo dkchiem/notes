@@ -1,9 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-
 import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import { minify } from 'html-minifier';
 import copy from 'rollup-plugin-copy';
 import livereload from 'rollup-plugin-livereload';
@@ -11,9 +9,13 @@ import postcss from 'rollup-plugin-postcss';
 import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 
-const svelteConfig = require('./svelte.config');
+import fs from 'fs';
+import path from 'path';
 
-const production = !process.env.ROLLUP_WATCH;
+const { preprocess } = require('./svelte.config.js');
+
+const mode = process.env.NODE_ENV;
+const dev = mode === 'development';
 
 const minifyHtml = (input, output, options) => ({
   generateBundle() {
@@ -33,12 +35,8 @@ export default {
     file: path.join(__dirname, 'public', 'bundle.js'),
   },
   plugins: [
-    svelte({
-      dev: !production,
-      css: (css) => {
-        css.write(path.join(__dirname, 'public', 'bundle.css'));
-      },
-      ...svelteConfig,
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(mode),
     }),
     alias({
       entries: [
@@ -65,15 +63,20 @@ export default {
         { find: /@src\/(.*)\.(.*)/, replacement: __dirname + '/src/$1.$2' },
       ],
     }),
+    svelte({
+      dev,
+      hydratable: true,
+      emitCss: true,
+      preprocess,
+    }),
     resolve({
       browser: true,
-      dedupe: (importee) =>
-        importee === 'svelte' || importee.startsWith('svelte/'),
+      dedupe: ['svelte'],
     }),
     fs.writeFileSync(path.join(__dirname, 'public', 'bundle2.css'), ''),
     postcss({
       extract: path.join(__dirname, 'public', 'bundle2.css'),
-      minimize: production,
+      minimize: !dev,
     }),
     copy({
       targets: [
@@ -92,7 +95,7 @@ export default {
         ],
       },
     }),
-    !production &&
+    dev &&
       copy({
         targets: [
           {
@@ -101,8 +104,8 @@ export default {
           },
         ],
       }),
-    !production && livereload(path.join(__dirname, 'public')),
-    production &&
+    dev && livereload(path.join(__dirname, 'public')),
+    !dev &&
       minifyHtml(
         path.join(__dirname, 'src', 'index.html'),
         path.join(__dirname, 'public', 'index.html'),
@@ -120,7 +123,7 @@ export default {
           useShortDoctype: true,
         },
       ),
-    production && terser(),
+    !dev && terser(),
   ],
   watch: {
     clearScreen: true,

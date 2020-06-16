@@ -7,7 +7,6 @@ admin.initializeApp();
 
 exports.createProfile = functions.auth.user().onCreate((user) => {
   const userObject = {
-    displayName: user.displayName,
     email: user.email,
   };
 

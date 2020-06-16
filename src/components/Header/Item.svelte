@@ -1,16 +1,7 @@
 <script>
-  import { createPopper } from '@popperjs/core';
-  import { onMount } from 'svelte';
+  import OptionsPopover from '@components/OptionsPopover.svelte';
 
   export let icon, viewBox, path;
-
-  let test;
-
-  // onMount(() => {
-  //   createPopper(this, test, {
-  //     placement: 'right',
-  //   });
-  // });
 </script>
 
 <style lang="scss">
@@ -37,19 +28,20 @@
   }
 </style>
 
-<div id="item">
-  <svg
-    height="20px"
-    aria-hidden="true"
-    focusable="false"
-    data-prefix="fas"
-    data-icon={icon}
-    class="icon"
-    role="img"
-    xmlns="http://www.w3.org/2000/svg"
-    {viewBox}>
-    <path fill="currentColor" d={path} />
-  </svg>
-</div>
-
-<!-- <div bind:this={test}>Hello</div> -->
+<OptionsPopover>
+  <div id="item">
+    <svg
+      height="20px"
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon={icon}
+      class="icon"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      {viewBox}>
+      <path fill="currentColor" d={path} />
+    </svg>
+  </div>
+  <div class="slot" slot="options">Hello</div>
+</OptionsPopover>
