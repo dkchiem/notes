@@ -1,5 +1,31 @@
 <script>
-  export let icon, viewBox, path;
+  import { onMount } from 'svelte';
+  import tippy from 'tippy.js';
+  import '@styles/tippy.scss';
+
+  export let icon,
+    viewBox,
+    path,
+    options = false,
+    trigger = 'mouseenter click',
+    popover,
+    item;
+
+  onMount(() => {
+    if (options) {
+      tippy(item, {
+        content: popover.innerHTML,
+        allowHTML: true,
+        arrow: false,
+        trigger: trigger,
+        interactive: true,
+        onTrigger(instance, event) {
+          console.log(instance);
+          console.log(event);
+        },
+      });
+    }
+  });
 </script>
 
 <style lang="scss">
@@ -24,9 +50,16 @@
       height: 50%;
     }
   }
+
+  #popover {
+    display: none;
+    * {
+      background-color: red;
+    }
+  }
 </style>
 
-<div id="item">
+<div id="item" bind:this={item}>
   <svg
     height="20px"
     aria-hidden="true"
@@ -39,4 +72,8 @@
     {viewBox}>
     <path fill="currentColor" d={path} />
   </svg>
+</div>
+
+<div id="popover" bind:this={popover}>
+  <slot />
 </div>
