@@ -2,9 +2,27 @@
   import ItemBar from '@components/Header/ItemBar.svelte';
   import Item from '@components/Header/Item.svelte';
 
-  import itemBarItems from '@config/itemBarItems.js';
+  import tippy from 'tippy.js';
+  import 'tippy.js/dist/tippy.css';
+  import { onMount } from 'svelte';
 
   let showMenu, stayOpen;
+
+  onMount(() => {
+    tippy('#item', {
+      // content: optionsList.innerHTML,
+      content(reference) {
+        const id = reference.getAttribute('icon');
+        const template = document.getElementById(id);
+        console.log(template);
+        return template.innerHTML;
+      },
+      allowHTML: true,
+      arrow: false,
+      trigger: 'mouseenter click',
+      interactive: true,
+    });
+  });
 
   function logout() {
     console.log('Logout');
@@ -47,6 +65,10 @@
     #space {
       flex: 1;
     }
+    // #options-list {
+    //   display: flex;
+    //   flex-direction: column;
+    // }
   }
 </style>
 
@@ -55,8 +77,60 @@
   <h1>Notes</h1>
   <div id="space" />
   <ItemBar>
-    {#each itemBarItems as item}
+    <!-- {#each itemBarItems as item}
       <Item {...item} />
-    {/each}
+      <div id="options-list" bind:this={optionsList} style="display: none;">
+        <div>Hello</div>
+        <div>Hello</div>
+        <div>Hello</div>
+        <div>Hello</div>
+      </div>
+    {/each} -->
+    <Item
+      id="item"
+      icon="info"
+      path="M20 424.229h20V279.771H20c-11.046 0-20-8.954-20-20V212c0-11.046
+      8.954-20 20-20h112c11.046 0 20 8.954 20 20v212.229h20c11.046 0 20 8.954 20
+      20V492c0 11.046-8.954 20-20 20H20c-11.046
+      0-20-8.954-20-20v-47.771c0-11.046 8.954-20 20-20zM96 0C56.235 0 24 32.235
+      24 72s32.235 72 72 72 72-32.235 72-72S135.764 0 96 0z"
+      viewBox="0 0 192 512" />
+    <div id="options-list info" style="display: none;">
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+    </div>
+    <Item
+      id="item"
+      icon="user"
+      path="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3
+      128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9
+      16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48
+      48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
+      viewBox="0 0 448 512" />
+    <div id="options-list user" style="display: none;">
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+    </div>
+    <Item
+      id="item"
+      icon="save"
+      path="M433.941 129.941l-83.882-83.882A48 48 0 0 0 316.118 32H48C21.49 32 0
+      53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49
+      48-48V163.882a48 48 0 0 0-14.059-33.941zM224 416c-35.346 0-64-28.654-64-64
+      0-35.346 28.654-64 64-64s64 28.654 64 64c0 35.346-28.654 64-64
+      64zm96-304.52V212c0 6.627-5.373 12-12 12H76c-6.627
+      0-12-5.373-12-12V108c0-6.627 5.373-12 12-12h228.52c3.183 0 6.235 1.264
+      8.485 3.515l3.48 3.48A11.996 11.996 0 0 1 320 111.48z"
+      viewBox="0 0 448 512" />
+    <div id="options-list save" style="display: none;">
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+    </div>
   </ItemBar>
 </header>
