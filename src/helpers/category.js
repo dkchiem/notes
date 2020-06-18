@@ -76,6 +76,32 @@ export function addCategory() {
   categoriesStore.set(convertCategories(categoriesArray));
 }
 
+export function renameCategory(userID, categoryID, name) {
+  return new Promise((resolve, reject) => {
+    const db = firebase.firestore();
+    db.collection('users')
+      .doc(userID)
+      .collection('categories')
+      .doc(categoryID)
+      .update({
+        name: name,
+      })
+      .then(() => {
+        categoriesArray.forEach((obj) => {
+          if (obj.id === categoryID) {
+            obj.name = name;
+            categoriesStore.set(convertCategories(categoriesArray));
+            resolve('Updated successfully');
+          }
+        });
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+        reject();
+      });
+  });
+}
+
 // Drag & drop
 export const destinationCategory = writable('');
 export const initalCategory = writable('');
@@ -99,7 +125,7 @@ export function changeParent(userID) {
         parent: categoryDest,
       })
       .then(() => {
-        categoriesArray.forEach((obj, index) => {
+        categoriesArray.forEach((obj) => {
           if (obj.id === categoryInitial) {
             obj.parent = categoryDest;
             categoriesStore.set(convertCategories(categoriesArray));

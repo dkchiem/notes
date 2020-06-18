@@ -34,6 +34,14 @@
     settings = !settings;
   }
 
+  // Text input actions
+  function onKeyup(e) {
+    if (e.keyCode === 13) {
+      // Enter key
+      renaming = false;
+    }
+  }
+
   // Drag actions
   function categoryDragStart() {
     setTimeout(() => {
@@ -230,7 +238,8 @@
       type="text"
       bind:value={name}
       placeholder="Category Name"
-      autocomplete="off" />
+      autocomplete="off"
+      on:keyup={onKeyup} />
   {:else}
     <span>{name}</span>
     <div id="space" />

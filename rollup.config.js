@@ -2,6 +2,7 @@ import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
+import babel from '@rollup/plugin-babel';
 import { minify } from 'html-minifier';
 import copy from 'rollup-plugin-copy';
 import livereload from 'rollup-plugin-livereload';
@@ -94,6 +95,16 @@ export default {
           'firestore',
         ],
       },
+    }),
+    babel({
+      extensions: ['.js', '.mjs', '.html', '.svelte'],
+      babelHelpers: 'runtime',
+      exclude: ['node_modules/@babel/**'],
+      presets: ['@babel/preset-env'],
+      plugins: [
+        '@babel/plugin-syntax-dynamic-import',
+        ['@babel/plugin-transform-runtime', { useESModules: true }],
+      ],
     }),
     dev &&
       copy({
