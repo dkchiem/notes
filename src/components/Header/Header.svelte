@@ -26,9 +26,15 @@
       user-select: none;
       font-family: 'Unica One', serif;
     }
-    #logo {
-      height: 75%;
+    #pencilFront {
+      height: 65%;
       margin-right: 10px;
+      user-select: none;
+    }
+    #pencilBack {
+      height: 65%;
+      margin-left: 10px;
+      user-select: none;
     }
     #space {
       flex: 1;
@@ -50,8 +56,9 @@
 </style>
 
 <header>
-  <img id="logo" src="../../assets/logo.png" alt="logo" />
+  <img id="pencilFront" src="../../assets/pencilFront.png" alt="logo" />
   <h1>Notes</h1>
+  <img id="pencilBack" src="../../assets/pencilBack.png" alt="logo" />
   <div id="space" />
   <ItemBar>
     <!-- {#each itemBarItems as item}

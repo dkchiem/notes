@@ -80,7 +80,6 @@
   on:click={toolToggled}>
   <div id="icon-container">
     <svg
-      id="plus"
       aria-hidden="true"
       focusable="false"
       data-prefix="fas"

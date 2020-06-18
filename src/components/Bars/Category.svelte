@@ -1,13 +1,13 @@
 <script>
   import { fly } from 'svelte/transition';
   import {
+    getCategories,
     destinationCategory,
     initalCategory,
     changeParent,
     categorySelected,
   } from '@helpers/category.js';
   import { getUid } from '@helpers/user.js';
-  import { getCategories } from '@helpers/database.js';
 
   export let expanded = false,
     name,
@@ -17,14 +17,12 @@
   let settings, categoryId;
   $: nochild = categories && (nochild = categories.length == 0 ? true : false);
 
-  main();
-
-  async function main() {
-    await categories;
+  // Click actions
+  function categoryExpanded() {
+    categories && (expanded = !expanded);
   }
 
   function categoryToggled() {
-    categories && (expanded = !expanded);
     categorySelected.set({ name: name, id: id });
   }
 
@@ -33,7 +31,7 @@
     settings = !settings;
   }
 
-  // Drag
+  // Drag actions
   function categoryDragStart() {
     setTimeout(() => {
       this.style.display = 'none';
@@ -61,11 +59,11 @@
     this.style.backgroundColor = null;
   }
 
-  async function categoryDrop() {
+  function categoryDrop() {
     this.style.backgroundColor = null;
     destinationCategory.set(id || '');
-    await changeParent(getUid());
-    getCategories(getUid());
+    changeParent(getUid());
+    //getCategories(getUid());
   }
 </script>
 
@@ -100,9 +98,14 @@
     * {
       margin: 0 5px;
     }
-    .plus {
-      width: 0.75rem;
+    .expand {
+      height: 1.5rem;
+      width: 1.5rem;
       min-width: 0.75rem;
+      transition: transform 0.2s;
+      &:hover {
+        transform: scale(1.1);
+      }
     }
     .folder {
       width: 1.3rem;
@@ -127,7 +130,7 @@
   }
 
   .nochild {
-    .plus {
+    .expand {
       opacity: 0;
     }
   }
@@ -135,10 +138,10 @@
 
 <div
   class="item"
-  on:click={categoryToggled}
   class:nochild
   in:fly={{ y: 20, duration: 500 }}
   draggable="true"
+  on:click={categoryToggled}
   on:dragstart={categoryDragStart}
   on:dragend={categoryDragEnd}
   on:dragenter={categoryDragEnter}
@@ -149,19 +152,17 @@
     <svg
       aria-hidden="true"
       focusable="false"
-      data-prefix="far"
-      data-icon="minus-square"
-      class="plus svg-inline--fa fa-minus-square fa-w-14"
+      data-prefix="fas"
+      data-icon="caret-down"
+      class="expand svg-inline--fa fa-caret-down fa-w-10"
       role="img"
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 448 512">
+      viewBox="0 0 320 512"
+      on:click={categoryExpanded}>
       <path
         fill="currentColor"
-        d="M108 284c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h232c6.6 0 12 5.4
-        12 12v32c0 6.6-5.4 12-12 12H108zM448 80v352c0 26.5-21.5 48-48
-        48H48c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48h352c26.5 0 48 21.5
-        48 48zm-48 346V86c0-3.3-2.7-6-6-6H54c-3.3 0-6 2.7-6 6v340c0 3.3 2.7 6 6
-        6h340c3.3 0 6-2.7 6-6z" />
+        d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5
+        7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z" />
     </svg>
     <svg
       aria-hidden="true"
@@ -184,21 +185,18 @@
     <svg
       aria-hidden="true"
       focusable="false"
-      data-prefix="far"
-      data-icon="plus-square"
-      class="plus svg-inline--fa fa-plus-square fa-w-14"
+      data-prefix="fas"
+      data-icon="caret-right"
+      class="expand svg-inline--fa fa-caret-right fa-w-6"
       role="img"
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 448 512">
+      viewBox="0 0 192 512"
+      on:click={categoryExpanded}>
       <path
         fill="currentColor"
-        d="M352 240v32c0 6.6-5.4 12-12 12h-88v88c0 6.6-5.4 12-12 12h-32c-6.6
-        0-12-5.4-12-12v-88h-88c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12
-        12-12h88v-88c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v88h88c6.6 0 12 5.4
-        12 12zm96-160v352c0 26.5-21.5 48-48 48H48c-26.5
-        0-48-21.5-48-48V80c0-26.5 21.5-48 48-48h352c26.5 0 48 21.5 48 48zm-48
-        346V86c0-3.3-2.7-6-6-6H54c-3.3 0-6 2.7-6 6v340c0 3.3 2.7 6 6 6h340c3.3 0
-        6-2.7 6-6z" />
+        d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662
+        128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0
+        402.48 0 384.662z" />
     </svg>
     <svg
       aria-hidden="true"

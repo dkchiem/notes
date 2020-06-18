@@ -33,6 +33,7 @@
     "highlight.js": "^10.0.3",
     "marked": "^1.1.0",
     "svelte-router-spa": "^5.6.0",
+    "sweetalert2": "^9.15.1",
     "tippy.js": "^6.2.3"
   },
   "scripts": {

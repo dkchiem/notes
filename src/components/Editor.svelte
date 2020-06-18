@@ -108,7 +108,12 @@
 </style>
 
 <div id="container">
-  <input id="title" type="text" placeholder="Title" bind:value={title} />
+  <input
+    id="title"
+    type="text"
+    placeholder="Title"
+    bind:value={title}
+    autocomplete="off" />
   <div id="content">
 
     <div class="codeArea">

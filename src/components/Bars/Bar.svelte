@@ -1,6 +1,4 @@
 <script>
-  import Tool from '@components/Bars/Tool.svelte';
-
   export let title, barColor, position;
   const zIndex = 500 - position;
   const closeBtnPos = position == 0 ? '5px' : `${55 * position + 5}px`;
@@ -74,7 +72,7 @@
         margin-bottom: 5px;
       }
       #toolbar {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
       }
       #items {
         flex: 1;
@@ -99,6 +97,7 @@
         transform: rotate(0deg);
         transition: 0.2s;
         height: 1.3rem;
+        user-select: none;
       }
       &:hover {
         right: -36px;
@@ -117,7 +116,7 @@
   --content-left-margin: {contentLeftMargin}; --closed-width: {closedWidth}">
 
   <div id="close-btn" on:click={menuToggled} class:closed={isClosed}>
-    <img id="arrow" src="../../assets/chevron-left-solid.svg" alt="" />
+    <img id="arrow" src="../../assets/chevron-left-solid.svg" alt="arrow" />
   </div>
 
   <div id="content">
