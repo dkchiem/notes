@@ -13,12 +13,14 @@
     name,
     categories,
     parent,
-    id;
+    id,
+    renaming = false;
   let settings, categoryId;
   $: nochild = categories && (nochild = categories.length == 0 ? true : false);
 
   // Click actions
-  function categoryExpanded() {
+  function categoryExpanded(e) {
+    e.stopPropagation();
     categories && (expanded = !expanded);
   }
 
@@ -26,7 +28,8 @@
     categorySelected.set({ name: name, id: id });
   }
 
-  function settingsToggled() {
+  function settingsToggled(e) {
+    e.stopPropagation();
     console.log('settings');
     settings = !settings;
   }
@@ -59,16 +62,17 @@
     this.style.backgroundColor = null;
   }
 
-  function categoryDrop() {
+  async function categoryDrop() {
     this.style.backgroundColor = null;
     destinationCategory.set(id || '');
-    changeParent(getUid());
-    //getCategories(getUid());
+    await changeParent(getUid());
+    expanded = true;
   }
 </script>
 
 <style lang="scss">
   @import 'src/styles/_colors.scss';
+  @import 'src/styles/_variables.scss';
 
   ul {
     list-style: none;
@@ -98,11 +102,18 @@
     * {
       margin: 0 5px;
     }
+    #rename {
+      height: 1.5rem;
+      flex: 1;
+      border-radius: 5px;
+      border: $border;
+      padding: 0 10px;
+    }
     .expand {
       height: 1.5rem;
       width: 1.5rem;
       min-width: 0.75rem;
-      transition: transform 0.2s;
+      transition: transform 0.1s;
       &:hover {
         transform: scale(1.1);
       }
@@ -213,8 +224,17 @@
         48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z" />
     </svg>
   {/if}
-  <span>{name}</span>
-  <div id="space" />
+  {#if renaming}
+    <input
+      id="rename"
+      type="text"
+      bind:value={name}
+      placeholder="Category Name"
+      autocomplete="off" />
+  {:else}
+    <span>{name}</span>
+    <div id="space" />
+  {/if}
   <svg
     on:click={settingsToggled}
     id="settings"

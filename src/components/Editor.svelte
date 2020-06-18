@@ -60,7 +60,6 @@
       font-size: 1.5rem;
       margin-bottom: 10px;
       border-radius: 10px;
-      outline: none;
     }
 
     #content {
@@ -91,7 +90,6 @@
         border-radius: 10px;
         padding: 20px;
         min-width: 1fr;
-        resize: none;
         font-size: 1rem;
         outline: none;
         font-family: monospace;

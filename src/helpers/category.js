@@ -38,15 +38,6 @@ export function getCategories(userID) {
   });
 }
 
-export function addCategory() {
-  categoriesArray.push({
-    name: 'New Category',
-    id: '',
-    parent: '',
-  });
-  categoriesStore.set(convertCategories(categoriesArray));
-}
-
 function convertCategories(array) {
   var map = {};
   for (var i = 0; i < array.length; i++) {
@@ -75,6 +66,16 @@ function convertCategories(array) {
   return map['-'].categories;
 }
 
+export function addCategory() {
+  categoriesArray.push({
+    name: 'New Category',
+    id: '',
+    parent: '',
+    renaming: true,
+  });
+  categoriesStore.set(convertCategories(categoriesArray));
+}
+
 // Drag & drop
 export const destinationCategory = writable('');
 export const initalCategory = writable('');
@@ -101,10 +102,6 @@ export function changeParent(userID) {
         categoriesArray.forEach((obj, index) => {
           if (obj.id === categoryInitial) {
             obj.parent = categoryDest;
-          } else if (obj.id === categoryDest) {
-            obj.expanded = true;
-          }
-          if (index === categoriesArray.length - 1) {
             categoriesStore.set(convertCategories(categoriesArray));
             resolve('Updated successfully');
           }

@@ -114,10 +114,6 @@
           viewBox="0 0 512 512"
           on:toggle={searchToggled} />
       </div>
-      <div>
-        <input id="title" type="text" placeholder="Category Title" />
-        <button>Add</button>
-      </div>
     </div>
     <Category {categories} name="Home" expanded />
   </Bar>
