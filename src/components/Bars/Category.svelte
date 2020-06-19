@@ -15,7 +15,7 @@
     parent,
     id,
     renaming = false;
-  let settings, categoryId;
+  let item, settings, categoryId;
   $: nochild = categories && (nochild = categories.length == 0 ? true : false);
 
   // Click actions
@@ -35,10 +35,11 @@
   }
 
   // Text input actions
-  function onKeyup(e) {
+  function renameKeyup(e) {
     if (e.keyCode === 13) {
       // Enter key
       renaming = false;
+      renameCategory(getUid());
     }
   }
 
@@ -160,6 +161,7 @@
   class:nochild
   in:fly={{ y: 20, duration: 500 }}
   draggable="true"
+  bind:this={item}
   on:click={categoryToggled}
   on:dragstart={categoryDragStart}
   on:dragend={categoryDragEnd}
@@ -239,7 +241,16 @@
       bind:value={name}
       placeholder="Category Name"
       autocomplete="off"
-      on:keyup={onKeyup} />
+      on:keyup={renameKeyup}
+      on:focus={() => {
+        item.setAttribute('draggable', 'false');
+      }}
+      on:blur={() => {
+        item.setAttribute('draggable', 'true');
+      }} />
+    <!-- on:mousedown={(e) => {
+        e.preventDefault();
+      }} -->
   {:else}
     <span>{name}</span>
     <div id="space" />
