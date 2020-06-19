@@ -10,7 +10,6 @@
     categoriesStore,
     getCategories,
     categorySelected,
-    addCategory,
   } from '@helpers/category.js';
   import { getNotes } from '@helpers/note.js';
   import { userID, getUid } from '@helpers/user.js';
@@ -58,6 +57,13 @@
 
   function addToggled() {
     console.log('add');
+    categories.push({
+      name: 'New Category',
+      parent: '',
+      categories: [],
+      renaming: true,
+    });
+    categories = categories;
   }
 
   function searchToggled() {
@@ -102,7 +108,7 @@
           17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0
           32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
           viewBox="0 0 448 512"
-          on:toggle={addCategory} />
+          on:toggle={addToggled} />
         <Tool
           name="Search"
           path="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7

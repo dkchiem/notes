@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import firebase from 'firebase/app';
+import log from '@helpers/log.js';
 
 export const categorySelected = writable({});
 
@@ -9,6 +10,7 @@ let categoriesArray;
 
 export function getCategories(userID) {
   return new Promise((resolve, reject) => {
+    log.dev('firebase: getting categories');
     const db = firebase.firestore();
     let dataArray = [];
     let index = -1;
@@ -108,6 +110,7 @@ export const initalCategory = writable('');
 
 export function changeParent(userID) {
   return new Promise((resolve, reject) => {
+    log.dev('firebase: changing category parent');
     let categoryInitial, categoryDest;
     initalCategory.subscribe((c) => {
       categoryInitial = c;

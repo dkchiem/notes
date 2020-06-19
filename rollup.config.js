@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import babel from '@rollup/plugin-babel';
+import strip from '@rollup/plugin-strip';
 import { minify } from 'html-minifier';
 import copy from 'rollup-plugin-copy';
 import livereload from 'rollup-plugin-livereload';
@@ -96,6 +97,10 @@ export default {
         ],
       },
     }),
+    !dev &&
+      strip({
+        functions: ['log.dev'],
+      }),
     babel({
       extensions: ['.js', '.mjs', '.html', '.svelte'],
       babelHelpers: 'runtime',

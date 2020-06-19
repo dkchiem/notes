@@ -25,6 +25,7 @@
   }
 
   function categoryToggled() {
+    //console.log(categories)
     categorySelected.set({ name: name, id: id });
   }
 
@@ -36,14 +37,15 @@
 
   // Text input actions
   function renameKeyup(e) {
+    // Enter key
     if (e.keyCode === 13) {
-      // Enter key
       renaming = false;
       renameCategory(getUid());
     }
   }
 
   // Drag actions
+  // Dragged category
   function categoryDragStart() {
     setTimeout(() => {
       this.style.display = 'none';
@@ -53,11 +55,11 @@
 
   function categoryDragEnd() {
     setTimeout(() => {
-      this.style.display = null;
       this.style.backgroundColor = null;
     }, 0);
   }
 
+  // Destination category
   function categoryDragEnter(e) {
     e.preventDefault();
     this.style.backgroundColor = '#eeeeee';
@@ -248,9 +250,6 @@
       on:blur={() => {
         item.setAttribute('draggable', 'true');
       }} />
-    <!-- on:mousedown={(e) => {
-        e.preventDefault();
-      }} -->
   {:else}
     <span>{name}</span>
     <div id="space" />
