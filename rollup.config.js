@@ -1,23 +1,22 @@
 import alias from '@rollup/plugin-alias';
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
 import babel from '@rollup/plugin-babel';
-import strip from '@rollup/plugin-strip';
-import { minify } from 'html-minifier';
+import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
+import fs from 'fs';
 import livereload from 'rollup-plugin-livereload';
+import { minify } from 'html-minifier';
+import path from 'path';
 import postcss from 'rollup-plugin-postcss';
+import replace from '@rollup/plugin-replace';
+import resolve from '@rollup/plugin-node-resolve';
+import strip from '@rollup/plugin-strip';
 import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 
-import fs from 'fs';
-import path from 'path';
-
 const { preprocess } = require('./svelte.config.js');
 
-const mode = process.env.NODE_ENV;
-const dev = mode === 'development';
+const dev = process.env.ROLLUP_WATCH;
+const mode = dev ? 'development' : 'production';
 
 const minifyHtml = (input, output, options) => ({
   generateBundle() {
@@ -88,15 +87,16 @@ export default {
         },
       ],
     }),
-    commonjs({
-      namedExports: {
-        './node_modules/idb/build/idb.js': ['openDb'],
-        './node_modules/firebase/dist/index.cjs.js': [
-          'initializeApp',
-          'firestore',
-        ],
-      },
-    }),
+    commonjs(),
+    // {
+    //   namedExports: {
+    //     './node_modules/idb/build/idb.js': ['openDb'],
+    //     './node_modules/firebase/dist/index.cjs.js': [
+    //       'initializeApp',
+    //       'firestore',
+    //     ],
+    //   },
+    // }
     !dev &&
       strip({
         functions: ['log.dev'],

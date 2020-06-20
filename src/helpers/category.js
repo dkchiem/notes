@@ -53,7 +53,6 @@ function convertCategories(array) {
     if (typeof map[obj.id].name == 'undefined') {
       map[obj.id].id = obj.id;
       map[obj.id].name = obj.name;
-      map[obj.id].parent = obj.parent;
     }
 
     var parent = obj.parent || '-';
@@ -68,14 +67,34 @@ function convertCategories(array) {
   return map['-'].categories;
 }
 
-export function addCategory() {
-  categoriesArray.push({
-    name: 'New Category',
-    id: '',
-    parent: '',
-    renaming: true,
+export function addCategory(userID, name) {
+  return new Promise((resolve, reject) => {
+    const db = firebase.firestore();
+
+    db.collection('users')
+      .doc(userID)
+      .collection('categories')
+      .add({
+        name: name || 'Untitled',
+        parent: '',
+      })
+      .then((docRef) => {
+        categoriesArray.push({
+          name: name,
+          id: docRef.id,
+          parent: '',
+        });
+        console.log(categoriesArray);
+        //categoriesArray = categoriesArray;
+        categoriesStore.set(convertCategories(categoriesArray));
+        log.dev('Add category - data');
+        resolve();
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+        reject();
+      });
   });
-  categoriesStore.set(convertCategories(categoriesArray));
 }
 
 export function renameCategory(userID, categoryID, name) {

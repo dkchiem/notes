@@ -6,13 +6,13 @@
     initalCategory,
     changeParent,
     categorySelected,
+    addCategory,
   } from '@helpers/category.js';
   import { getUid } from '@helpers/user.js';
 
   export let expanded = false,
     name,
     categories,
-    parent,
     id,
     renaming = false;
   let item, settings, categoryId;
@@ -35,12 +35,16 @@
     settings = !settings;
   }
 
+  function contextMenuToggled(e) {
+    e.preventDefault();
+  }
+
   // Text input actions
   function renameKeyup(e) {
     // Enter key
     if (e.keyCode === 13) {
       renaming = false;
-      renameCategory(getUid());
+      addCategory(getUid(), name);
     }
   }
 
@@ -54,9 +58,9 @@
   }
 
   function categoryDragEnd() {
-    setTimeout(() => {
-      this.style.backgroundColor = null;
-    }, 0);
+    // setTimeout(() => {
+    //   this.style.backgroundColor = null;
+    // }, 0);
   }
 
   // Destination category
@@ -165,6 +169,7 @@
   draggable="true"
   bind:this={item}
   on:click={categoryToggled}
+  on:contextmenu={contextMenuToggled}
   on:dragstart={categoryDragStart}
   on:dragend={categoryDragEnd}
   on:dragenter={categoryDragEnter}

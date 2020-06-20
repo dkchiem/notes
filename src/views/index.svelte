@@ -5,6 +5,7 @@
   import Note from '@components/Bars/Note.svelte';
   import Category from '@components/Bars/Category.svelte';
   import Tool from '@components/Bars/Tool.svelte';
+  import ContextMenu from '@components/ContextMenu.svelte';
 
   import {
     categoriesStore,
@@ -13,6 +14,7 @@
   } from '@helpers/category.js';
   import { getNotes } from '@helpers/note.js';
   import { userID, getUid } from '@helpers/user.js';
+  import log from '@helpers/log.js';
 
   import firebase from 'firebase/app';
   import { onMount } from 'svelte';
@@ -39,6 +41,7 @@
   async function main() {
     await getCategories(getUid());
     categoriesStore.subscribe((c) => {
+      log.dev('categoriesStore update');
       categories = c;
     });
     categorySelected.subscribe(async (c) => {
@@ -96,8 +99,8 @@
 </style>
 
 <Header />
+<ContextMenu />
 <div id="container">
-
   <Bar title="Categories" barColor="#52de97" position="0">
     <div class="slot" slot="toolbar">
       <div class="toolbar">

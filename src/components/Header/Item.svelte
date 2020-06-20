@@ -7,9 +7,9 @@
     viewBox,
     path,
     options = false,
-    trigger = 'mouseenter click',
-    popover,
-    item;
+    trigger = 'mouseenter click';
+
+  let item, popover;
 
   onMount(() => {
     if (options) {
