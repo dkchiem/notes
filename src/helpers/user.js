@@ -12,15 +12,26 @@ export function getUid() {
   return uid;
 }
 
+export function isLoggedIn() {
+  let isLoggedIn;
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      isLoggedIn = true;
+    } else {
+      isLoggedIn = false;
+    }
+  });
+  return isLoggedIn;
+}
+
 export function logout() {
   firebase
     .auth()
     .signOut()
-    .then(function () {
-      console.log('Hello');
+    .then(() => {
       navigateTo('/login');
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.log(error);
     });
 }

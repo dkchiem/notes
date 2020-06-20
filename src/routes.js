@@ -1,40 +1,37 @@
+// Views
 import SignUp from '@views/signup.svelte';
 import Login from '@views/login.svelte';
 import Index from '@views/index.svelte';
 
-import firebase from 'firebase/app';
-
-function userIsLoggedIn() {
-  return firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-}
+// Helpers
+import { isLoggedIn } from '@helpers/user.js';
 
 const routes = [
   {
     name: '/',
     component: Index,
-    onlyIf: { guard: userIsLoggedIn, redirect: '/login' },
+    onlyIf: { guard: isLoggedIn, redirect: '/login' },
   },
   {
     name: '/login',
     component: Login,
+    onlyIf: {
+      guard: () => {
+        return !isLoggedIn();
+      },
+      redirect: '/',
+    },
   },
   {
     name: '/signup',
     component: SignUp,
+    onlyIf: {
+      guard: () => {
+        return !isLoggedIn();
+      },
+      redirect: '/',
+    },
   },
 ];
-
-// onlyIf: {
-//   guard: () => {
-//     return userIsLoggedIn ? false : true;
-//   },
-//   redirect: '/',
-// },
 
 export { routes };

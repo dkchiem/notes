@@ -12,10 +12,10 @@
   }
 
   onMount(() => {
-    // window.addEventListener('contextmenu', (e) => {
-    //   event.preventDefault();
-    //   activateMenu(e);
-    // });
+    window.addEventListener('contextmenu', (e) => {
+      event.preventDefault();
+      activateMenu(e);
+    });
     window.addEventListener('click', () => {
       active = false;
     });
@@ -42,6 +42,7 @@
     }
     100% {
       opacity: 0;
+      display: none;
     }
   }
 
@@ -53,11 +54,13 @@
     border-radius: 5px;
     transform-origin: top left;
     list-style: none;
-    visibility: hidden;
     overflow: hidden;
+    display: none;
+    visibility: hidden;
     animation: fadeOut 0.3s;
     animation-fill-mode: forwards;
     &.active {
+      display: block;
       animation: scaleIn 0.3s ease-in-out;
       animation-fill-mode: forwards;
     }

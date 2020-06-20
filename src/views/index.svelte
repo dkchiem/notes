@@ -1,4 +1,5 @@
 <script>
+  // Components
   import Header from '@components/Header/Header.svelte';
   import Editor from '@components/Editor.svelte';
   import Bar from '@components/Bars/Bar.svelte';
@@ -7,6 +8,7 @@
   import Tool from '@components/Bars/Tool.svelte';
   import ContextMenu from '@components/ContextMenu.svelte';
 
+  // Helpers
   import {
     categoriesStore,
     getCategories,
@@ -16,6 +18,7 @@
   import { userID, getUid } from '@helpers/user.js';
   import log from '@helpers/log.js';
 
+  // Packages
   import firebase from 'firebase/app';
   import { onMount } from 'svelte';
 
@@ -25,14 +28,8 @@
     categories,
     notes = [];
 
-  // const selectCategory = async (categoryID) => {
-  //   console.log(categoryID);
-  //   if (categoryID) {
-  //     notes = await getNotes(getUid(), categoryID);
-  //   }
-  // };
-
   onMount(() => {
+    console.log(user)
     userID.set('UR2rQONWehG0QytSsAy4');
     console.log(getUid());
     main();
@@ -52,19 +49,19 @@
     });
   }
 
-  async function selectNote(event) {
-    const data = event.detail;
+  async function selectNote(e) {
+    const data = e.detail;
     title = data.name;
     markdown = '# HelloWorld!';
   }
 
   function addToggled() {
-    console.log('add');
     categories.push({
       name: 'New Category',
       parent: '',
       categories: [],
       renaming: true,
+      newCategory: true,
     });
     categories = categories;
   }

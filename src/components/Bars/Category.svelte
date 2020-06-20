@@ -14,7 +14,8 @@
     name,
     categories,
     id,
-    renaming = false;
+    renaming = false,
+    newCategory = false;
   let item, settings, categoryId;
   $: nochild = categories && (nochild = categories.length == 0 ? true : false);
 
@@ -26,17 +27,21 @@
 
   function categoryToggled() {
     //console.log(categories)
+    console.log(newCategory);
     categorySelected.set({ name: name, id: id });
   }
 
   function settingsToggled(e) {
     e.stopPropagation();
-    console.log('settings');
     settings = !settings;
   }
 
   function contextMenuToggled(e) {
     e.preventDefault();
+  }
+
+  function cancelAddCategory() {
+    e.stopPropagation();
   }
 
   // Text input actions
@@ -114,6 +119,11 @@
     &:hover {
       background-color: $color-light-gray;
     }
+    &.nochild {
+      .expand {
+        display: none;
+      }
+    }
     * {
       margin: 0 5px;
     }
@@ -137,6 +147,18 @@
       width: 1.3rem;
       min-width: 1.3rem;
     }
+    #minus {
+      height: 1rem;
+      width: 1rem;
+      min-width: 1rem;
+      transition: transform 0.1s;
+      &:hover {
+        transform: scale(1.1);
+      }
+      &.hidden {
+        display: none;
+      }
+    }
     #space {
       flex: 1;
     }
@@ -152,12 +174,6 @@
       cursor: grab;
       width: 1.3rem;
       min-width: 1.3rem;
-    }
-  }
-
-  .nochild {
-    .expand {
-      opacity: 0;
     }
   }
 </style>
@@ -176,55 +192,25 @@
   on:dragleave={categoryDragLeave}
   on:dragover={categoryDragOver}
   on:drop={categoryDrop}>
-  {#if expanded}
+
+  {#if renaming}
     <svg
+      id="minus"
       aria-hidden="true"
       focusable="false"
       data-prefix="fas"
-      data-icon="caret-down"
-      class="expand svg-inline--fa fa-caret-down fa-w-10"
+      data-icon="minus-circle"
+      class="svg-inline--fa fa-minus-circle fa-w-16"
+      class:hidden={!newCategory}
       role="img"
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 320 512"
-      on:click={categoryExpanded}>
+      viewBox="0 0 512 512"
+      on:click={cancelAddCategory}>
       <path
         fill="currentColor"
-        d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5
-        7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z" />
-    </svg>
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      data-prefix="fas"
-      data-icon="folder-open"
-      class="folder svg-inline--fa fa-folder-open fa-w-18"
-      role="img"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 576 512">
-      <path
-        fill="currentColor"
-        d="M572.694 292.093L500.27 416.248A63.997 63.997 0 0 1 444.989
-        448H45.025c-18.523 0-30.064-20.093-20.731-36.093l72.424-124.155A64 64 0
-        0 1 152 256h399.964c18.523 0 30.064 20.093 20.73 36.093zM152
-        224h328v-48c0-26.51-21.49-48-48-48H272l-64-64H48C21.49 64 0 85.49 0
-        112v278.046l69.077-118.418C86.214 242.25 117.989 224 152 224z" />
-    </svg>
-  {:else}
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      data-prefix="fas"
-      data-icon="caret-right"
-      class="expand svg-inline--fa fa-caret-right fa-w-6"
-      role="img"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 192 512"
-      on:click={categoryExpanded}>
-      <path
-        fill="currentColor"
-        d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662
-        128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0
-        402.48 0 384.662z" />
+        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256
+        8zM124 296c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h264c6.6 0 12 5.4
+        12 12v56c0 6.6-5.4 12-12 12H124z" />
     </svg>
     <svg
       aria-hidden="true"
@@ -240,8 +226,6 @@
         d="M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48
         48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z" />
     </svg>
-  {/if}
-  {#if renaming}
     <input
       id="rename"
       type="text"
@@ -256,6 +240,71 @@
         item.setAttribute('draggable', 'true');
       }} />
   {:else}
+    {#if expanded}
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        data-prefix="fas"
+        data-icon="caret-down"
+        class="expand svg-inline--fa fa-caret-down fa-w-10"
+        role="img"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 320 512"
+        on:click={categoryExpanded}>
+        <path
+          fill="currentColor"
+          d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8
+          7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z" />
+      </svg>
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        data-prefix="fas"
+        data-icon="folder-open"
+        class="folder svg-inline--fa fa-folder-open fa-w-18"
+        role="img"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 576 512">
+        <path
+          fill="currentColor"
+          d="M572.694 292.093L500.27 416.248A63.997 63.997 0 0 1 444.989
+          448H45.025c-18.523 0-30.064-20.093-20.731-36.093l72.424-124.155A64 64
+          0 0 1 152 256h399.964c18.523 0 30.064 20.093 20.73 36.093zM152
+          224h328v-48c0-26.51-21.49-48-48-48H272l-64-64H48C21.49 64 0 85.49 0
+          112v278.046l69.077-118.418C86.214 242.25 117.989 224 152 224z" />
+      </svg>
+    {:else}
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        data-prefix="fas"
+        data-icon="caret-right"
+        class="expand svg-inline--fa fa-caret-right fa-w-6"
+        role="img"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 192 512"
+        on:click={categoryExpanded}>
+        <path
+          fill="currentColor"
+          d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662
+          128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0
+          402.48 0 384.662z" />
+      </svg>
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        data-prefix="fas"
+        data-icon="folder"
+        class="folder svg-inline--fa fa-folder fa-w-16"
+        role="img"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 512 512">
+        <path
+          fill="currentColor"
+          d="M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48
+          48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z" />
+      </svg>
+    {/if}
     <span>{name}</span>
     <div id="space" />
   {/if}
