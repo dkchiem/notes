@@ -91,8 +91,7 @@
 </script>
 
 <style lang="scss">
-  @import 'src/styles/_colors.scss';
-  @import 'src/styles/_variables.scss';
+  @import 'src/styles/_theme.scss';
 
   ul {
     list-style: none;
@@ -149,8 +148,8 @@
     }
     #minus {
       height: 1rem;
-      width: 1rem;
-      min-width: 1rem;
+      width: 1.5rem;
+      min-width: 0.75rem;
       transition: transform 0.1s;
       &:hover {
         transform: scale(1.1);

@@ -3,6 +3,6 @@
   import SignUp from '@components/Authentication/SignUp.svelte';
 </script>
 
-<AuthenticationContainer>
+<AuthenticationContainer title="Sign Up">
   <SignUp />
 </AuthenticationContainer>

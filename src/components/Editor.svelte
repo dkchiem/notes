@@ -3,7 +3,7 @@
   import CodeMirror from 'codemirror';
   import { onMount } from 'svelte';
   import hljs from 'highlight.js';
-  import '../styles/codemirror.css';
+  import '../styles/codemirror.scss';
   import 'github-markdown-css/github-markdown.css';
 
   export let title = '',
@@ -37,7 +37,7 @@
   function makeMarkdown() {
     const textEntered = editor.getValue();
     marked.setOptions({
-      highlight: function(code, lang) {
+      highlight: function (code, lang) {
         return hljs.highlight(lang, code).value;
       },
     });
@@ -46,8 +46,7 @@
 </script>
 
 <style lang="scss">
-  @import 'src/styles/_colors.scss';
-  @import 'src/styles/_variables.scss';
+  @import 'src/styles/_theme.scss';
 
   #container {
     display: flex;

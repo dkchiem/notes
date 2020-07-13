@@ -2,30 +2,46 @@
   import { createEventDispatcher } from 'svelte';
   import { onMount } from 'svelte';
 
-  let contextMenu,
+  let transformOrigin = 'top left';
+
+  let menu,
     active = false;
 
-  function activateMenu(e) {
-    contextMenu.style.top = e.pageY + 'px';
-    contextMenu.style.left = e.pageX + 'px';
+  function activateContextMenu(e) {
+    console.log(e);
+    transformOrigin = 'top left';
+    menu.style.top = e.pageY + 'px';
+    menu.style.left = e.pageX + 'px';
+    active = true;
+  }
+
+  export function activateDropdownMenu(e) {
+    transformOrigin = 'top right';
+    console.log(e);
+    console.log('Hey');
+    // menu.style.top = e.pageY + 'px';
+    // menu.style.right = e.pageX + 'px';
+    // active = true;
     active = true;
   }
 
   onMount(() => {
-    window.addEventListener('contextmenu', (e) => {
-      event.preventDefault();
-      activateMenu(e);
-    });
-    window.addEventListener('click', () => {
-      active = false;
-    });
-    window.setTimeout(() => {
-      contextMenu.style.visibility = 'visible';
-    }, 1000);
+    // window.addEventListener('contextmenu', (e) => {
+    //   e.preventDefault();
+    //   activateContextMenu(e);
+    // });
+    // window.addEventListener('click', () => {
+    //   active = false;
+    // });
+    // window.setTimeout(() => {
+    //   contextMenu.style.visibility = 'visible';
+    // }, 1000);
   });
 </script>
 
 <style lang="scss">
+  $transform-origin: var(--transform-origin);
+
   @keyframes scaleIn {
     0% {
       opacity: 1;
@@ -36,29 +52,16 @@
     }
   }
 
-  @keyframes fadeOut {
-    0% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-      display: none;
-    }
-  }
-
-  #context-menu {
+  #menu {
     position: fixed;
     z-index: 10000;
     width: 150px;
     background: #1b1a1a;
     border-radius: 5px;
-    transform-origin: top left;
+    transform-origin: $transform-origin;
     list-style: none;
     overflow: hidden;
     display: none;
-    visibility: hidden;
-    animation: fadeOut 0.3s;
-    animation-fill-mode: forwards;
     &.active {
       display: block;
       animation: scaleIn 0.3s ease-in-out;
@@ -86,7 +89,11 @@
   }
 </style>
 
-<ul id="context-menu" class:active bind:this={contextMenu}>
+<ul
+  id="menu"
+  class:active
+  bind:this={menu}
+  style="--transform-origin: {transformOrigin};">
   <li class="item">
     <i class="fa fa-cut" />
     Cut

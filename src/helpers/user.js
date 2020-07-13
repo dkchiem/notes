@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import firebase from 'firebase/app';
 import { navigateTo } from 'svelte-router-spa';
+import log from '@helpers/log.js';
 
 export const userID = writable('');
 
@@ -13,25 +14,57 @@ export function getUid() {
 }
 
 export function isLoggedIn() {
-  let isLoggedIn;
-  firebase.auth().onAuthStateChanged(function (user) {
+  return firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
-      isLoggedIn = true;
+      return true;
     } else {
-      isLoggedIn = false;
+      return false;
     }
   });
-  return isLoggedIn;
 }
 
 export function logout() {
-  firebase
-    .auth()
-    .signOut()
-    .then(() => {
-      navigateTo('/login');
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  return new Promise((resolve, reject) => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        navigateTo('/login');
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(errorMessage);
+      });
+  });
 }
+
+// export function signInUser(email, password) {
+//   return firebase.auth().signInWithEmailAndPassword(email, password);
+//   // .then(() => {
+
+//   // })
+//   // .catch(function (error) {
+//   //   var errorCode = error.code;
+//   //   var errorMessage = error.message;
+//   //   showSpinner = false;
+//   //   console.log(`Error ${errorCode}: ${errorMessage}`);
+//   //   errorMsg = errorMessage;
+//   // });
+// }
+
+// export function createUser(email, password) {
+//   return new Promise((resolve, reject) => {
+//     firebase
+//       .auth()
+//       .createUserWithEmailAndPassword(email, password)
+//       .then(() => {
+//         resolve();
+//       })
+//       .catch((error) => {
+//         var errorCode = error.code;
+//         var errorMessage = error.message;
+//         console.log(`Error ${errorCode}: ${errorMessage}`);
+//         reject(new Error(errorMessage));
+//       });
+//   });
+// }

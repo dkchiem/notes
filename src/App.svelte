@@ -3,7 +3,6 @@
   import { routes } from './routes';
   import firebase from 'firebase/app';
   import 'firebase/performance';
-
   import 'firebase/auth';
   import 'firebase/firestore';
   import 'firebase/analytics';

@@ -1,113 +1,56 @@
-<script>
-  import ItemBar from '@components/Header/ItemBar.svelte';
-  import Item from '@components/Header/Item.svelte';
-  import { logout } from '@helpers/user.js';
-
-  let showMenu, stayOpen;
-</script>
-
 <style lang="scss">
-  @import 'src/styles/_colors.scss';
+  @import 'src/styles/_theme.scss';
   @import 'src/styles/_variables.scss';
 
   header {
-    padding: 0 5%;
-    //box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    align-items: center;
+    background-color: white;
+    border-bottom: $border;
+    box-shadow: $box-shadow;
+    display: flex;
+    display: flex;
+    height: $header-height;
+    padding: 0 30px;
     position: absolute;
     top: 0;
     width: 100%;
     z-index: 1000;
-    background-color: white;
-    height: $header-height;
-    display: flex;
-    align-items: center;
-    display: flex;
-    h1 {
-      user-select: none;
-      font-family: 'Unica One', serif;
-    }
-    #pencilFront {
+
+    #logo {
+      display: flex;
       height: 65%;
-      margin-right: 10px;
-      user-select: none;
+      margin-left: 5%;
+      #pencilFront {
+        height: 100%;
+        margin-right: 10px;
+        user-select: none;
+      }
+      h1 {
+        user-select: none;
+        font-family: 'Unica One', serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #pencilBack {
+        height: 100%;
+        margin-left: 10px;
+        user-select: none;
+      }
     }
-    #pencilBack {
-      height: 65%;
-      margin-left: 10px;
-      user-select: none;
-    }
+
     #space {
       flex: 1;
     }
-    .option {
-      cursor: pointer;
-      padding: 5px 10px;
-      border-radius: 5px;
-      transition: 0.2s;
-      &:hover {
-        background-color: $color-light-gray;
-      }
-    }
-    // #options-list {
-    //   display: flex;
-    //   flex-direction: column;
-    // }
   }
 </style>
 
 <header>
-  <img id="pencilFront" src="../../assets/pencilFront.png" alt="logo" />
-  <h1>Notes</h1>
-  <img id="pencilBack" src="../../assets/pencilBack.png" alt="logo" />
+  <div id="logo">
+    <img id="pencilFront" src="../../assets/pencilFront.png" alt="logo" />
+    <h1>Notes</h1>
+    <img id="pencilBack" src="../../assets/pencilBack.png" alt="logo" />
+  </div>
   <div id="space" />
-  <ItemBar>
-    <!-- {#each itemBarItems as item}
-      <Item {...item} />
-      <div id="options-list" bind:this={optionsList} style="display: none;">
-        <div>Hello</div>
-        <div>Hello</div>
-        <div>Hello</div>
-        <div>Hello</div>
-      </div>
-    {/each} -->
-    <Item
-      icon="info"
-      path="M20 424.229h20V279.771H20c-11.046 0-20-8.954-20-20V212c0-11.046
-      8.954-20 20-20h112c11.046 0 20 8.954 20 20v212.229h20c11.046 0 20 8.954 20
-      20V492c0 11.046-8.954 20-20 20H20c-11.046
-      0-20-8.954-20-20v-47.771c0-11.046 8.954-20 20-20zM96 0C56.235 0 24 32.235
-      24 72s32.235 72 72 72 72-32.235 72-72S135.764 0 96 0z"
-      viewBox="0 0 192 512"
-      options>
-      <div class="option">Help</div>
-      <div class="option">Credits</div>
-    </Item>
-    <Item
-      icon="user"
-      path="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3
-      128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9
-      16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48
-      48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
-      viewBox="0 0 448 512"
-      options>
-      <div class="option">Settings</div>
-      <div
-        class="option"
-        on:click={() => {
-          console.log('logout');
-        }}>
-        Logout
-      </div>
-    </Item>
-    <Item
-      icon="save"
-      path="M433.941 129.941l-83.882-83.882A48 48 0 0 0 316.118 32H48C21.49 32 0
-      53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49
-      48-48V163.882a48 48 0 0 0-14.059-33.941zM224 416c-35.346 0-64-28.654-64-64
-      0-35.346 28.654-64 64-64s64 28.654 64 64c0 35.346-28.654 64-64
-      64zm96-304.52V212c0 6.627-5.373 12-12 12H76c-6.627
-      0-12-5.373-12-12V108c0-6.627 5.373-12 12-12h228.52c3.183 0 6.235 1.264
-      8.485 3.515l3.48 3.48A11.996 11.996 0 0 1 320 111.48z"
-      viewBox="0 0 448 512" />
-  </ItemBar>
+  <slot />
 </header>

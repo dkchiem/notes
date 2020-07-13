@@ -1,5 +1,5 @@
 <style lang="scss">
-  @import 'src/styles/_colors.scss';
+  @import 'src/styles/_theme.scss';
 
   @keyframes load {
     0%,

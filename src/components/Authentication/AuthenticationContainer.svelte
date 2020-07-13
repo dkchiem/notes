@@ -1,5 +1,9 @@
+<script>
+  export let title;
+</script>
+
 <style lang="scss">
-  @import 'src/styles/_colors.scss';
+  @import 'src/styles/_theme.scss';
 
   @keyframes bg-animation {
     0% {
@@ -21,18 +25,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  #form-container {
-    background-color: white;
-    border-radius: 10px;
-    width: 25%;
-    padding: 80px;
+    #form-container {
+      background-color: white;
+      border-radius: 10px;
+      width: 25%;
+      padding: 80px;
+      #title {
+        text-align: center;
+        user-select: none;
+        font-family: 'Unica One', serif;
+      }
+    }
   }
 </style>
 
 <div id="container">
   <div id="form-container">
+    <h1 id="title">{title}</h1>
     <slot />
   </div>
 </div>

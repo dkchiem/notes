@@ -42,7 +42,7 @@
         showSpinner = false;
         navigateTo('/');
       })
-      .catch(function(error) {
+      .catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
         showSpinner = false;
@@ -53,13 +53,7 @@
 </script>
 
 <style lang="scss">
-  @import 'src/styles/_colors.scss';
-
-  #signin {
-    font-family: 'Unica One', cursive;
-    text-align: center;
-    user-select: none;
-  }
+  @import 'src/styles/_theme.scss';
 
   form {
     max-width: 500px;
@@ -237,7 +231,6 @@
   }
 </style>
 
-<h1 id="signin">Sign Up</h1>
 <form>
   <div class="spinner-container" class:show={showSpinner}>
     <Spinner />

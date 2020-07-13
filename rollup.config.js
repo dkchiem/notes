@@ -1,6 +1,7 @@
 import alias from '@rollup/plugin-alias';
 import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
+import cleaner from 'rollup-plugin-cleaner';
 import copy from 'rollup-plugin-copy';
 import fs from 'fs';
 import livereload from 'rollup-plugin-livereload';
@@ -10,13 +11,17 @@ import postcss from 'rollup-plugin-postcss';
 import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
 import strip from '@rollup/plugin-strip';
+import serve from 'rollup-plugin-serve';
 import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 
 const { preprocess } = require('./svelte.config.js');
 
-const dev = process.env.ROLLUP_WATCH;
-const mode = dev ? 'development' : 'production';
+const production = !process.env.ROLLUP_WATCH;
+const mode = production ? 'production' : 'development';
+
+const srcDir = path.join(__dirname, 'src');
+const publicDir = path.join(__dirname, 'public');
 
 const minifyHtml = (input, output, options) => ({
   generateBundle() {
@@ -28,14 +33,17 @@ const minifyHtml = (input, output, options) => ({
 });
 
 export default {
-  input: path.join(__dirname, 'src', 'main.js'),
+  input: path.join(srcDir, 'main.js'),
   output: {
     sourcemap: true,
     format: 'iife',
     name: 'app',
-    file: path.join(__dirname, 'public', 'bundle.js'),
+    file: path.join(publicDir, 'bundle.js'),
   },
   plugins: [
+    cleaner({
+      targets: [publicDir],
+    }),
     replace({
       'process.env.NODE_ENV': JSON.stringify(mode),
     }),
@@ -65,20 +73,19 @@ export default {
       ],
     }),
     svelte({
-      dev,
-      hydratable: true,
+      dev: !production,
       emitCss: true,
       preprocess,
+    }),
+    postcss({
+      extract: path.join(publicDir, 'bundle.css'),
+      minimize: production,
     }),
     resolve({
       browser: true,
       dedupe: ['svelte'],
     }),
-    fs.writeFileSync(path.join(__dirname, 'public', 'bundle2.css'), ''),
-    postcss({
-      extract: path.join(__dirname, 'public', 'bundle2.css'),
-      minimize: !dev,
-    }),
+    commonjs(),
     copy({
       targets: [
         {
@@ -87,44 +94,33 @@ export default {
         },
       ],
     }),
-    commonjs(),
-    // {
-    //   namedExports: {
-    //     './node_modules/idb/build/idb.js': ['openDb'],
-    //     './node_modules/firebase/dist/index.cjs.js': [
-    //       'initializeApp',
-    //       'firestore',
-    //     ],
-    //   },
-    // }
-    !dev &&
-      strip({
-        functions: ['log.dev'],
-      }),
-    babel({
-      extensions: ['.js', '.mjs', '.html', '.svelte'],
-      babelHelpers: 'runtime',
-      exclude: ['node_modules/@babel/**'],
-      presets: ['@babel/preset-env'],
-      plugins: [
-        '@babel/plugin-syntax-dynamic-import',
-        ['@babel/plugin-transform-runtime', { useESModules: true }],
-      ],
-    }),
-    dev &&
+    !production &&
       copy({
         targets: [
           {
-            src: path.join(__dirname, 'src', 'index.html'),
-            dest: path.join(__dirname, 'public'),
+            src: path.join(srcDir, 'index.html'),
+            dest: publicDir,
           },
         ],
       }),
-    dev && livereload(path.join(__dirname, 'public')),
-    !dev &&
+    !production &&
+      serve({
+        open: true,
+        verbose: true,
+        contentBase: 'public',
+        host: 'localhost',
+        historyApiFallback: true,
+      }),
+    !production &&
+      livereload({
+        watch: publicDir,
+        verbose: true,
+        delay: 500,
+      }),
+    production &&
       minifyHtml(
-        path.join(__dirname, 'src', 'index.html'),
-        path.join(__dirname, 'public', 'index.html'),
+        path.join(srcDir, 'index.html'),
+        path.join(publicDir, 'index.html'),
         {
           collapseWhitespace: true,
           collapseInlineTagWhitespace: true,
@@ -139,7 +135,21 @@ export default {
           useShortDoctype: true,
         },
       ),
-    !dev && terser(),
+    production &&
+      strip({
+        functions: ['log.dev'],
+      }),
+    production &&
+      babel({
+        babelHelpers: 'runtime',
+        exclude: ['node_modules/@babel/**'],
+        presets: ['@babel/preset-env'],
+        plugins: [
+          '@babel/plugin-syntax-dynamic-import',
+          ['@babel/plugin-transform-runtime', { useESModules: true }],
+        ],
+      }),
+    production && terser(),
   ],
   watch: {
     clearScreen: true,

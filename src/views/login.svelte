@@ -3,6 +3,6 @@
   import Login from '@components/Authentication/Login.svelte';
 </script>
 
-<AuthenticationContainer>
+<AuthenticationContainer title="Login">
   <Login />
 </AuthenticationContainer>

@@ -16,7 +16,7 @@ const routes = [
     name: '/login',
     component: Login,
     onlyIf: {
-      guard: () => {
+      guard: function () {
         return !isLoggedIn();
       },
       redirect: '/',
@@ -26,7 +26,7 @@ const routes = [
     name: '/signup',
     component: SignUp,
     onlyIf: {
-      guard: () => {
+      guard: function () {
         return !isLoggedIn();
       },
       redirect: '/',

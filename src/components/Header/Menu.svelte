@@ -1,7 +1,6 @@
 <style lang="scss">
   #item-bar {
     display: flex;
-    height: 40px;
   }
 </style>
 

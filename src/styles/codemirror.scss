@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 /* BASICS */
 
 .CodeMirror {
@@ -5,7 +7,7 @@
   font-family: monospace;
   color: black;
   direction: ltr;
-  border: solid 1px #979797;
+  border: $border;
   border-radius: 10px;
   top: 0;
   bottom: 0;
@@ -33,7 +35,7 @@
 /* GUTTER */
 
 .CodeMirror-gutters {
-  border-right: 1px solid #ddd;
+  border-right: $border;
   background-color: #f7f7f7;
   white-space: nowrap;
 }
