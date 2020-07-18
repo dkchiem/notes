@@ -24,7 +24,7 @@
   // Packages
   import firebase from 'firebase/app';
   import { onMount } from 'svelte';
-  import { navigateTo } from 'svelte-router-spa';
+  import { replace } from 'svelte-spa-router';
 
   let title,
     markdown,
@@ -80,9 +80,9 @@
       .auth()
       .signOut()
       .then(() => {
-        console.log('logout');
-        navigateTo('login');
-        console.log(firebase.auth().currentUser);
+        // console.log('logout');
+        // console.log(firebase.auth().currentUser);
+        replace('/login');
       })
       .catch((error) => {
         console.log(error);
@@ -138,9 +138,8 @@
       viewBox="0 0 496 512">
       <Dropdown>
         <DropdownItem
-          on:click={async () => {
+          on:click={() => {
             console.log(firebase.auth().currentUser);
-            console.log(isLoggedIn());
           }}>
           Settings
         </DropdownItem>

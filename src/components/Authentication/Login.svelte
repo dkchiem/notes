@@ -1,8 +1,7 @@
 <script>
   import Spinner from '../Spinner.svelte';
-
   import firebase from 'firebase/app';
-  import { navigateTo } from 'svelte-router-spa';
+  import { replace } from 'svelte-spa-router';
 
   let showPassword = false,
     password,
@@ -29,7 +28,7 @@
             .then(() => {
               console.log('Done!');
               showSpinner = false;
-              navigateTo('/');
+              replace('/');
             })
             .catch(function (error) {
               var errorCode = error.code;
@@ -52,7 +51,7 @@
         .signInWithEmailAndPassword(email, password)
         .then(() => {
           showSpinner = false;
-          navigateTo('/');
+          replace('/');
         })
         .catch(function (error) {
           var errorCode = error.code;

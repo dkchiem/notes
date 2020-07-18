@@ -2,7 +2,6 @@
   import Spinner from '../Spinner.svelte';
 
   import firebase from 'firebase/app';
-  import { navigateTo } from 'svelte-router-spa';
 
   let strength = 0,
     validations = [],
@@ -40,7 +39,7 @@
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
         showSpinner = false;
-        navigateTo('/');
+        // navigateTo('/');
       })
       .catch(function (error) {
         var errorCode = error.code;

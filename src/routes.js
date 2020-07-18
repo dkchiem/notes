@@ -4,33 +4,30 @@ import Login from '@views/login.svelte';
 import Index from '@views/index.svelte';
 
 // Helpers
-import { isLoggedIn, isNotLoggedIn } from '@helpers/user.js';
+import { isLoggedIn } from '@helpers/user.js';
 
-const routes = [
-  {
-    name: '/',
-    component: Index,
-    onlyIf: {
-      guard: isLoggedIn,
-      redirect: '/login',
-    },
-  },
-  {
-    name: '/login',
-    component: Login,
-    onlyIf: {
-      guard: isNotLoggedIn,
-      redirect: '/',
-    },
-  },
-  {
-    name: '/signup',
-    component: SignUp,
-    onlyIf: {
-      guard: isNotLoggedIn,
-      redirect: '/',
-    },
-  },
-];
+// Packages
+import { wrap } from 'svelte-spa-router';
+
+const routes = {
+  '/': wrap(Index, { redirect: '/login' }, async (detail) => {
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+    await delay(3000);
+    console.log('Ok');
+    return false;
+  }),
+  '/login': wrap(Login, { redirect: '/' }, (detail) => {
+    // return !isLoggedIn();
+    return true;
+  }),
+  '/signup': wrap(SignUp, { redirect: '/' }, (detail) => {
+    // return !isLoggedIn();
+    return true;
+  }),
+
+  // // Catch-all
+  // // This is optional, but if present it must be the last
+  // '*': NotFound,
+};
 
 export { routes };

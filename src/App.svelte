@@ -1,11 +1,12 @@
 <script>
-  import { Router } from 'svelte-router-spa';
+  import Router from 'svelte-spa-router';
   import { routes } from './routes';
   import firebase from 'firebase/app';
   import 'firebase/performance';
   import 'firebase/auth';
   import 'firebase/firestore';
   import 'firebase/analytics';
+  import { replace } from 'svelte-spa-router';
 
   const firebaseConfig = {
     apiKey: 'AIzaSyDjujlxZckKpcV7KWQ8T6ZVR2NSy0H9Rkc',
@@ -21,10 +22,23 @@
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
   const perf = firebase.performance();
+
+  function conditionsFailed(e) {
+    console.log(e.detail);
+    switch (e.detail.userData.redirect) {
+      case '/login':
+        replace('/login');
+        break;
+
+      case '/':
+        replace('/');
+        break;
+    }
+  }
 </script>
 
 <svelte:head>
   <title>Notes</title>
 </svelte:head>
 
-<Router {routes} />
+<Router {routes} on:conditionsFailed={conditionsFailed} />

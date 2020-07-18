@@ -1,6 +1,5 @@
 import { writable } from 'svelte/store';
 import firebase from 'firebase/app';
-import { navigateTo } from 'svelte-router-spa';
 import log from '@helpers/log.js';
 
 export const userID = writable('');
@@ -13,43 +12,23 @@ export function getUid() {
   return uid;
 }
 
-// export function isLoggedIn() {
-//   // if (firebase.auth().currentUser != null) {
-//   //   console.log('User');
-//   //   return true;
-//   // } else {
-//   //   console.log(firebase.auth().currentUser);
-//   //   return false;
-//   // }
-//   const getLoginState = new Promise((resolve, reject) => {
-//     firebase.auth().onAuthStateChanged(function (user) {
-//       if (user == null) {
-//         resolve(false);
-//       } else {
-//         resolve(true);
-//       }
-//     });
-//   }).then((loggedIn) => {
-//     console.log('logged in: ' + loggedIn);
-//     return loggedIn;
-//   });
-// }
-
-// export function isNotLoggedIn() {
-//   const getNotLoginState = new Promise((resolve, reject) => {
-//     firebase.auth().onAuthStateChanged(function (user) {
-//       console.log(user);
-//       if (user == null) {
-//         resolve(true);
-//       } else {
-//         resolve(false);
-//       }
-//     });
-//   }).then((notLoggedIn) => {
-//     console.log('not logged in: ' + notLoggedIn);
-//     return notLoggedIn;
-//   });
-// }
+export function isLoggedIn(callback) {
+  // if (firebase.auth().currentUser != null) {
+  //   console.log('User');
+  //   return true;
+  // } else {
+  //   console.log(firebase.auth().currentUser);
+  //   return false;
+  // }
+  firebase.auth().onAuthStateChanged(function (user) {
+    console.log(user);
+    if (user == null) {
+      callback(false);
+    } else {
+      callback(true);
+    }
+  });
+}
 
 export function logout() {
   return new Promise((resolve, reject) => {
@@ -57,7 +36,7 @@ export function logout() {
       .auth()
       .signOut()
       .then(() => {
-        navigateTo('/login');
+        // navigateTo('/login');
       })
       .catch((error) => {
         console.log(error);
