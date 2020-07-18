@@ -13,15 +13,43 @@ export function getUid() {
   return uid;
 }
 
-export function isLoggedIn() {
-  return firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-}
+// export function isLoggedIn() {
+//   // if (firebase.auth().currentUser != null) {
+//   //   console.log('User');
+//   //   return true;
+//   // } else {
+//   //   console.log(firebase.auth().currentUser);
+//   //   return false;
+//   // }
+//   const getLoginState = new Promise((resolve, reject) => {
+//     firebase.auth().onAuthStateChanged(function (user) {
+//       if (user == null) {
+//         resolve(false);
+//       } else {
+//         resolve(true);
+//       }
+//     });
+//   }).then((loggedIn) => {
+//     console.log('logged in: ' + loggedIn);
+//     return loggedIn;
+//   });
+// }
+
+// export function isNotLoggedIn() {
+//   const getNotLoginState = new Promise((resolve, reject) => {
+//     firebase.auth().onAuthStateChanged(function (user) {
+//       console.log(user);
+//       if (user == null) {
+//         resolve(true);
+//       } else {
+//         resolve(false);
+//       }
+//     });
+//   }).then((notLoggedIn) => {
+//     console.log('not logged in: ' + notLoggedIn);
+//     return notLoggedIn;
+//   });
+// }
 
 export function logout() {
   return new Promise((resolve, reject) => {

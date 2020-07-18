@@ -10,6 +10,6 @@
   }
 </style>
 
-<li id="dropdown-item">
+<li id="dropdown-item" on:click>
   <slot />
 </li>

@@ -36,7 +36,7 @@
     "github-markdown-css": "^4.0.0",
     "highlight.js": "^10.1.1",
     "marked": "^1.1.0",
-    "svelte-router-spa": "^5.7.1",
+    "svelte-spa-router": "^2.2.0",
     "sweetalert2": "^9.15.1"
   },
   "scripts": {

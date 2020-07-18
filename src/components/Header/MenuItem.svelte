@@ -31,9 +31,14 @@
   //   // document.addEventListener('click', outsideClickListener);
   // });
 
-  function toggleItem(e) {
-    e.stopPropagation();
-    active = !active;
+  function toggleItem() {
+    //e.stopPropagation();
+    // active = !active;
+    active = true;
+  }
+
+  function closeDropdown() {
+    active = false;
   }
 </script>
 
@@ -59,9 +64,23 @@
       top: 35px;
       right: -5px;
       display: none;
+      z-index: 2000;
       &.active {
         display: block;
       }
+    }
+  }
+
+  #overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: none;
+    z-index: 1050;
+    &.active {
+      display: block;
     }
   }
 </style>
@@ -83,3 +102,5 @@
     <slot />
   </div>
 </div>
+
+<div id="overlay" class:active on:click={closeDropdown} />

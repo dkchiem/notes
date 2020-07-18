@@ -18,14 +18,14 @@
     categorySelected,
   } from '@helpers/category.js';
   import { getNotes } from '@helpers/note.js';
-  import { userID, getUid } from '@helpers/user.js';
+  import { userID, getUid, isLoggedIn } from '@helpers/user.js';
   import log from '@helpers/log.js';
 
   // Packages
   import firebase from 'firebase/app';
   import { onMount } from 'svelte';
+  import { navigateTo } from 'svelte-router-spa';
 
-  const user = firebase.auth().currentUser;
   let title,
     markdown,
     categories,
@@ -33,7 +33,7 @@
   let menuInfo;
 
   onMount(() => {
-    console.log(user);
+    console.log(firebase.auth().currentUser);
     userID.set('UR2rQONWehG0QytSsAy4');
     console.log(getUid());
     main();
@@ -73,6 +73,20 @@
 
   function searchToggled() {
     console.log('search');
+  }
+
+  function logout() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log('logout');
+        navigateTo('login');
+        console.log(firebase.auth().currentUser);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 </script>
 
@@ -123,8 +137,14 @@
       4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"
       viewBox="0 0 496 512">
       <Dropdown>
-        <DropdownItem>Settings</DropdownItem>
-        <DropdownItem>Logout</DropdownItem>
+        <DropdownItem
+          on:click={async () => {
+            console.log(firebase.auth().currentUser);
+            console.log(isLoggedIn());
+          }}>
+          Settings
+        </DropdownItem>
+        <DropdownItem on:click={logout}>Logout</DropdownItem>
       </Dropdown>
     </MenuItem>
   </Menu>

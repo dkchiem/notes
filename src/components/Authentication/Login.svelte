@@ -9,7 +9,7 @@
     email,
     showSpinner,
     errorMsg,
-    staySignedIn;
+    staySignedIn = false;
 
   function getPassword(e) {
     password = e.target.value;
@@ -18,6 +18,7 @@
   function submit(e) {
     showSpinner = true;
     if (staySignedIn) {
+      console.log('stay Signed in');
       firebase
         .auth()
         .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
@@ -304,7 +305,7 @@
       name="staySignedIn"
       class="checkbox"
       placeholder=""
-      bind:value={staySignedIn}
+      bind:checked={staySignedIn}
       disabled={showSpinner} />
     <span>Keep me logged in</span>
   </div>
