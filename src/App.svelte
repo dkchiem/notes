@@ -1,12 +1,13 @@
 <script>
-  import Router from 'svelte-spa-router';
+  import Router, { replace, location } from 'svelte-spa-router';
   import { routes } from './routes';
   import firebase from 'firebase/app';
   import 'firebase/performance';
   import 'firebase/auth';
   import 'firebase/firestore';
   import 'firebase/analytics';
-  import { replace } from 'svelte-spa-router';
+  import { isLoggedIn } from '@helpers/user.js';
+  import log from '@helpers/log.js';
 
   const firebaseConfig = {
     apiKey: 'AIzaSyDjujlxZckKpcV7KWQ8T6ZVR2NSy0H9Rkc',
@@ -23,16 +24,31 @@
   firebase.analytics();
   const perf = firebase.performance();
 
-  function conditionsFailed(e) {
-    console.log(e.detail);
-    switch (e.detail.userData.redirect) {
-      case '/login':
-        replace('/login');
-        break;
+  let loggedIn;
 
-      case '/':
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (user === null) {
+      loggedIn = false;
+      log.dev('User disconnected');
+      replace('/login');
+    } else {
+      loggedIn = true;
+      log.dev('User connected');
+      replace('/');
+    }
+  });
+
+  function routeLoaded() {
+    if (loggedIn === false) {
+      if ($location === '/') {
+        replace('/login');
+      }
+    } else if (loggedIn === true) {
+      if ($location === '/login' || $location === '/signup') {
         replace('/');
-        break;
+      }
+    } else {
+      console.error('routeLoaded Error');
     }
   }
 </script>
@@ -41,4 +57,10 @@
   <title>Notes</title>
 </svelte:head>
 
-<Router {routes} on:conditionsFailed={conditionsFailed} />
+{#await isLoggedIn()}
+  loading...
+{:then value}
+  <Router {routes} on:routeLoaded={routeLoaded} />
+{:catch error}
+  Error
+{/await}

@@ -12,21 +12,15 @@ export function getUid() {
   return uid;
 }
 
-export function isLoggedIn(callback) {
-  // if (firebase.auth().currentUser != null) {
-  //   console.log('User');
-  //   return true;
-  // } else {
-  //   console.log(firebase.auth().currentUser);
-  //   return false;
-  // }
-  firebase.auth().onAuthStateChanged(function (user) {
-    console.log(user);
-    if (user == null) {
-      callback(false);
-    } else {
-      callback(true);
-    }
+export function isLoggedIn() {
+  return new Promise((resolve, reject) => {
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user == null) {
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    });
   });
 }
 

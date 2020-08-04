@@ -8,39 +8,7 @@ export const categoriesStore = writable([]);
 
 let categoriesArray;
 
-export function getCategories(userID) {
-  return new Promise((resolve, reject) => {
-    log.dev('firebase: getting categories');
-    const db = firebase.firestore();
-    let dataArray = [];
-    let index = -1;
-    db.collection('users')
-      .doc(userID)
-      .collection('categories')
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          dataArray.push({
-            name: doc.data().name,
-            id: doc.id,
-            parent: doc.data().parent,
-          });
-          index++;
-          if (index === querySnapshot.size - 1) {
-            categoriesArray = dataArray;
-            categoriesStore.set(convertCategories(dataArray));
-            resolve();
-          }
-        });
-      })
-      .catch((error) => {
-        console.log('Error getting documents: ', error);
-        reject();
-      });
-  });
-}
-
-function convertCategories(array) {
+function makeCategoriesObject(array) {
   var map = {};
   for (var i = 0; i < array.length; i++) {
     var obj = array[i];
@@ -67,6 +35,38 @@ function convertCategories(array) {
   return map['-'].categories;
 }
 
+export function getCategories(userID) {
+  return new Promise((resolve, reject) => {
+    log.dev('firebase: getting categories');
+    const db = firebase.firestore();
+    let dataArray = [];
+    let index = -1;
+    db.collection('users')
+      .doc(userID)
+      .collection('categories')
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          dataArray.push({
+            name: doc.data().name,
+            id: doc.id,
+            parent: doc.data().parent,
+          });
+          index++;
+          if (index === querySnapshot.size - 1) {
+            categoriesArray = dataArray;
+            categoriesStore.set(makeCategoriesObject(dataArray));
+            resolve();
+          }
+        });
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+        reject();
+      });
+  });
+}
+
 export function addCategory(userID, name) {
   return new Promise((resolve, reject) => {
     const db = firebase.firestore();
@@ -75,7 +75,7 @@ export function addCategory(userID, name) {
       .doc(userID)
       .collection('categories')
       .add({
-        name: name || 'Untitled',
+        name: name === '' ? '' : 'Untitled',
         parent: '',
       })
       .then((docRef) => {
@@ -86,7 +86,7 @@ export function addCategory(userID, name) {
         });
         console.log(categoriesArray);
         //categoriesArray = categoriesArray;
-        categoriesStore.set(convertCategories(categoriesArray));
+        categoriesStore.set(makeCategoriesObject(categoriesArray));
         log.dev('Add category - data');
         resolve();
       })
@@ -111,7 +111,7 @@ export function renameCategory(userID, categoryID, name) {
         categoriesArray.forEach((obj) => {
           if (obj.id === categoryID) {
             obj.name = name;
-            categoriesStore.set(convertCategories(categoriesArray));
+            categoriesStore.set(makeCategoriesObject(categoriesArray));
             resolve('Updated successfully');
           }
         });
@@ -150,7 +150,7 @@ export function changeParent(userID) {
         categoriesArray.forEach((obj) => {
           if (obj.id === categoryInitial) {
             obj.parent = categoryDest;
-            categoriesStore.set(convertCategories(categoriesArray));
+            categoriesStore.set(makeCategoriesObject(categoriesArray));
             resolve('Updated successfully');
           }
         });

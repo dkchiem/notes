@@ -79,11 +79,10 @@
     firebase
       .auth()
       .signOut()
-      .then(() => {
-        // console.log('logout');
-        // console.log(firebase.auth().currentUser);
-        replace('/login');
-      })
+      // .then(() => {
+      //   // console.log('logout');
+      //   // console.log(firebase.auth().currentUser);
+      // })
       .catch((error) => {
         console.log(error);
       });
