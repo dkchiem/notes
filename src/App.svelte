@@ -8,6 +8,7 @@
   import 'firebase/analytics';
   import { isLoggedIn } from '@helpers/user.js';
   import log from '@helpers/log.js';
+  import Loading from '@components/Loading.svelte';
 
   const firebaseConfig = {
     apiKey: 'AIzaSyDjujlxZckKpcV7KWQ8T6ZVR2NSy0H9Rkc',
@@ -58,7 +59,7 @@
 </svelte:head>
 
 {#await isLoggedIn()}
-  loading...
+  <Loading />
 {:then value}
   <Router {routes} on:routeLoaded={routeLoaded} />
 {:catch error}

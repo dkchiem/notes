@@ -10,7 +10,6 @@ import path from 'path';
 import postcss from 'rollup-plugin-postcss';
 import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
-import strip from '@rollup/plugin-strip';
 import serve from 'rollup-plugin-serve';
 import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
@@ -135,10 +134,6 @@ export default {
           useShortDoctype: true,
         },
       ),
-    production &&
-      strip({
-        functions: ['log.dev'],
-      }),
     production &&
       babel({
         babelHelpers: 'runtime',
