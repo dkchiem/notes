@@ -5,35 +5,7 @@
   let active = false,
     menuItem;
 
-  // const outsideClickListener = (e) => {
-  //   if (!menuItem.contains(e.target) && active) {
-  //     // or use: event.target.closest(selector) === null
-  //     active = false;
-  //     removeClickListener();
-  //   }
-  // };
-
-  // const removeClickListener = () => {
-  //   document.removeEventListener('click', outsideClickListener);
-  // };
-
-  // onMount(() => {
-  //   // window.addEventListener('click', (e) => {
-  //   //   e.preventDefault();
-  //   //   e.stopPropagation();
-  //   //   active = !active;
-  //   // });
-  //   window.addEventListener('click', function (e) {
-  //     if (this === e.target) {
-  //       active = false;
-  //     }
-  //   });
-  //   // document.addEventListener('click', outsideClickListener);
-  // });
-
   function toggleItem() {
-    //e.stopPropagation();
-    // active = !active;
     active = true;
   }
 

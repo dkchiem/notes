@@ -1,6 +1,7 @@
 <script>
   import Spinner from '../Spinner.svelte';
   import firebase from 'firebase/app';
+  import { link } from 'svelte-spa-router';
 
   let showPassword = false,
     password,
@@ -19,22 +20,9 @@
       console.log('stay Signed in');
       firebase
         .auth()
-        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .signInWithEmailAndPassword(email, password)
         .then(() => {
-          return firebase
-            .auth()
-            .signInWithEmailAndPassword(email, password)
-            .then(() => {
-              console.log('Done!');
-              showSpinner = false;
-            })
-            .catch(function (error) {
-              var errorCode = error.code;
-              var errorMessage = error.message;
-              showSpinner = false;
-              console.log(`Error ${errorCode}: ${errorMessage}`);
-              errorMsg = errorMessage;
-            });
+          showSpinner = false;
         })
         .catch(function (error) {
           var errorCode = error.code;
@@ -46,9 +34,21 @@
     } else {
       firebase
         .auth()
-        .signInWithEmailAndPassword(email, password)
+        .setPersistence(firebase.auth.Auth.Persistence.SESSION)
         .then(() => {
-          showSpinner = false;
+          return firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(() => {
+              showSpinner = false;
+            })
+            .catch(function (error) {
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              showSpinner = false;
+              console.log(`Error ${errorCode}: ${errorMessage}`);
+              errorMsg = errorMessage;
+            });
         })
         .catch(function (error) {
           var errorCode = error.code;
@@ -315,6 +315,6 @@
   </button>
 
   <div class="switchBtn-container">
-    <a class="switchBtn" href="/signup">No account yet? Sign Up</a>
+    <a class="switchBtn" href="/signup" use:link>No account yet? Sign Up</a>
   </div>
 </form>

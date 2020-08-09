@@ -1,6 +1,6 @@
-import { writable } from 'svelte/store';
 import firebase from 'firebase/app';
 
+// Get
 export function getNotes(userID, categoryID) {
   return new Promise((resolve, reject) => {
     const db = firebase.firestore();
@@ -24,6 +24,38 @@ export function getNotes(userID, categoryID) {
         } else {
           resolve([]);
         }
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+        reject();
+      });
+  });
+}
+
+// Add
+export function addNote(userID, categoryID, name) {
+  return new Promise((resolve, reject) => {
+    const db = firebase.firestore();
+
+    db.collection('users')
+      .doc(userID)
+      .collection('categories')
+      .doc(categoryID)
+      .collection('notes')
+      .add({
+        name: name === '' ? '' : 'Untitled',
+      })
+      .then((docRef) => {
+        categoriesArray.push({
+          name: name,
+          id: docRef.id,
+          parent: '',
+        });
+        console.log(categoriesArray);
+        //categoriesArray = categoriesArray;
+        categoriesStore.set(makeCategoriesObject(categoriesArray));
+        log.dev('Add category - data');
+        resolve();
       })
       .catch((error) => {
         console.log('Error getting documents: ', error);

@@ -5,15 +5,6 @@
 <style lang="scss">
   @import 'src/styles/_theme.scss';
 
-  @keyframes bg-animation {
-    0% {
-      background-position: left;
-    }
-    100% {
-      background-position: right;
-    }
-  }
-
   $gradient: linear-gradient(45deg, #2c7873, #52de97, #c0ffb3, #ffba5a);
 
   #container {

@@ -2,12 +2,16 @@ import { writable } from 'svelte/store';
 import firebase from 'firebase/app';
 import log from '@helpers/log.js';
 
+// Current selected category
 export const categorySelected = writable({});
 
+// Categories object tree
 export const categoriesStore = writable([]);
 
+// Categories array flat tree
 let categoriesArray;
 
+// Create categories tree
 function makeCategoriesObject(array) {
   var map = {};
   for (var i = 0; i < array.length; i++) {
@@ -35,6 +39,7 @@ function makeCategoriesObject(array) {
   return map['-'].categories;
 }
 
+// Get
 export function getCategories(userID) {
   return new Promise((resolve, reject) => {
     log.dev('firebase: getting categories');
@@ -67,6 +72,7 @@ export function getCategories(userID) {
   });
 }
 
+// Add
 export function addCategory(userID, name) {
   return new Promise((resolve, reject) => {
     const db = firebase.firestore();
@@ -97,6 +103,7 @@ export function addCategory(userID, name) {
   });
 }
 
+// Rename
 export function renameCategory(userID, categoryID, name) {
   return new Promise((resolve, reject) => {
     const db = firebase.firestore();

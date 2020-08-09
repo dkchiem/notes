@@ -136,7 +136,7 @@
     .expand {
       height: 1.5rem;
       width: 1.5rem;
-      min-width: 0.75rem;
+      min-width: 1.5rem;
       transition: transform 0.1s;
       &:hover {
         transform: scale(1.1);
@@ -149,7 +149,7 @@
     #minus {
       height: 1rem;
       width: 1.5rem;
-      min-width: 0.75rem;
+      min-width: 1.5rem;
       transition: transform 0.1s;
       &:hover {
         transform: scale(1.1);
@@ -160,6 +160,10 @@
     }
     #space {
       flex: 1;
+    }
+    #space2 {
+      width: 1.5rem;
+      min-width: 1.5rem;
     }
     #settings {
       width: 1.3rem;
@@ -239,6 +243,10 @@
         item.setAttribute('draggable', 'true');
       }} />
   {:else}
+    {#if nochild}
+      <div id="space2" />
+    {/if}
+
     {#if expanded}
       <svg
         aria-hidden="true"

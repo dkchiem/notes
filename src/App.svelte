@@ -9,6 +9,7 @@
   import { isLoggedIn } from '@helpers/user.js';
   import log from '@helpers/log.js';
   import Loading from '@components/Loading.svelte';
+  import ErrorPage from '@views/error.svelte';
 
   const firebaseConfig = {
     apiKey: 'AIzaSyDjujlxZckKpcV7KWQ8T6ZVR2NSy0H9Rkc',
@@ -49,10 +50,18 @@
         replace('/');
       }
     } else {
-      console.error('routeLoaded Error');
+      log.dev('routeLoaded Error');
     }
   }
 </script>
+
+<style lang="scss">
+  main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+</style>
 
 <svelte:head>
   <title>Notes</title>
@@ -61,7 +70,9 @@
 {#await isLoggedIn()}
   <Loading />
 {:then value}
-  <Router {routes} on:routeLoaded={routeLoaded} />
+  <main>
+    <Router {routes} on:routeLoaded={routeLoaded} />
+  </main>
 {:catch error}
-  Error
+  <ErrorPage title="Autentication Check Error" description={error.message} />
 {/await}

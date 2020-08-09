@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
 
-  export let name, path, viewBox;
+  export let name, path, viewBox, color;
 
   const dispatch = createEventDispatcher();
 
@@ -41,11 +41,13 @@
 <style lang="scss">
   @import 'src/styles/_theme.scss';
 
+  $color: var(--color);
+
   #tool {
     height: 1.4rem;
     border-radius: 0.7rem;
     background-color: white;
-    color: $color-green;
+    color: $color;
     min-width: 1.4rem;
     width: 1.4rem;
     display: flex;
@@ -62,7 +64,7 @@
       justify-content: center;
       svg {
         height: 0.8rem;
-        color: $color-green;
+        color: $color;
       }
     }
     #name {
@@ -77,7 +79,8 @@
   id="tool"
   on:mouseenter={toggleName}
   on:mouseleave={untoggleName}
-  on:click={toolToggled}>
+  on:click={toolToggled}
+  style="--color: {color};">
   <div id="icon-container">
     <svg
       aria-hidden="true"

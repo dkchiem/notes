@@ -1,6 +1,6 @@
 <script>
   import Spinner from '../Spinner.svelte';
-
+  import { link } from 'svelte-spa-router';
   import firebase from 'firebase/app';
 
   let strength = 0,
@@ -36,10 +36,22 @@
     showSpinner = true;
     firebase
       .auth()
-      .createUserWithEmailAndPassword(email, password)
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(() => {
-        showSpinner = false;
-        // navigateTo('/');
+        return firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, password)
+          .then(() => {
+            showSpinner = false;
+            // navigateTo('/');
+          })
+          .catch(function (error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            showSpinner = false;
+            console.log(`Error ${errorCode}: ${errorMessage}`);
+            errorMsg = errorMessage;
+          });
       })
       .catch(function (error) {
         var errorCode = error.code;
@@ -333,6 +345,6 @@
   </button>
 
   <div class="switchBtn-container">
-    <a class="switchBtn" href="/login">Have an account? Log In</a>
+    <a class="switchBtn" href="/login" use:link>Have an account? Log In</a>
   </div>
 </form>
