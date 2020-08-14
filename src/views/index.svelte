@@ -6,6 +6,7 @@
   import MenuItem from '@components/Header/MenuItem.svelte';
   import Dropdown from '@components/Menus/Dropdown.svelte';
   import DropdownItem from '@components/Menus/DropdownItem.svelte';
+  import Button from '@components/Button.svelte';
   // Interface
   import Bar from '@components/Bars/Bar.svelte';
   import Category from '@components/Bars/Category.svelte';
@@ -21,7 +22,7 @@
     categorySelected,
   } from '@helpers/category.js';
   // Notes
-  import { getNotes } from '@helpers/note.js';
+  import { getNotes, saveNote } from '@helpers/note.js';
   import { userID, getUid, logout } from '@helpers/user.js';
   // Log
   import log from '@helpers/log.js';
@@ -33,12 +34,15 @@
   let title,
     markdown,
     categories,
-    notes = [];
-  // let menuInfo;
+    notes = [],
+    selectedCategoryID,
+    selectedNoteID,
+    updatedTitle,
+    updatedMarkdown,
+    saveBtnDisabled = true;
 
   onMount(() => {
     userID.set(firebase.auth().currentUser.uid); //'UR2rQONWehG0QytSsAy4'
-    console.log(getUid());
     main();
   });
 
@@ -53,48 +57,68 @@
     categorySelected.subscribe(async (c) => {
       console.log(c);
       if (c.id) {
+        selectedCategoryID = c.id;
         notes = await getNotes(getUid(), c.id);
       }
     });
   }
 
-  // async function selectNote(e) {
-  //   const data = e.detail;
-  //   title = data.name;
-  //   markdown = '# HelloWorld!';
-  //   console.log('Hello');
-  // }
+  async function selectNote(e) {
+    const data = e.detail;
+    title = data.name;
+    selectedNoteID = data.id;
+    markdown = data.markdown;
+    if (selectedCategoryID && selectedNoteID) {
+      saveBtnDisabled = false;
+    } else {
+      saveBtnDisabled = true;
+    }
+  }
 
-  // function addCategoryToggled() {
-  //   categories.push({
-  //     name: 'New Category',
-  //     parent: '',
-  //     categories: [],
-  //     renaming: true,
-  //     newCategory: true,
-  //   });
-  //   categories = categories;
-  // }
+  function addCategoryToggled() {
+    categories.push({
+      name: 'New Category',
+      parent: '',
+      categories: [],
+      renaming: true,
+      newCategory: true,
+    });
+    categories = categories;
+  }
 
-  // function searchCategoryToggled() {
-  //   console.log('search');
-  // }
+  function searchCategoryToggled() {
+    console.log('search');
+  }
 
-  // function addNoteToggled() {
-  //   console.log('New note');
-  //   // categories.push({
-  //   //   name: 'New Category',
-  //   //   parent: '',
-  //   //   categories: [],
-  //   //   renaming: true,
-  //   //   newCategory: true,
-  //   // });
-  //   // categories = categories;
-  // }
+  function addNoteToggled() {
+    console.log('New note');
+    // categories.push({
+    //   name: 'New Category',
+    //   parent: '',
+    //   categories: [],
+    //   renaming: true,
+    //   newCategory: true,
+    // });
+    // categories = categories;
+  }
 
-  // function searchNoteToggled() {
-  //   console.log('search');
-  // }
+  function searchNoteToggled() {
+    console.log('search');
+  }
+
+  function save() {
+    if (selectedCategoryID && selectedNoteID) {
+      const noteIndex = notes.findIndex((note) => note.id === selectedNoteID);
+      notes[noteIndex].name = updatedTitle;
+      saveNote(
+        getUid(),
+        selectedCategoryID,
+        selectedNoteID,
+        updatedTitle,
+        updatedMarkdown,
+      );
+    }
+  }
 </script>
 
 <style lang="scss">
@@ -121,6 +145,7 @@
 </style>
 
 <Header>
+  <Button on:btnClicked={save} disabled={saveBtnDisabled} />
   <Menu>
     <MenuItem
       path="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248
@@ -157,7 +182,7 @@
 
 <div id="main-container">
   <Bar title="Categories" barColor="#52de97" position="0">
-    <!-- <div class="slot" slot="toolbar">
+    <div class="slot" slot="toolbar">
       <div class="toolbar">
         <Tool
           name="Add"
@@ -180,12 +205,12 @@
           color="#52de97"
           on:toggle={searchCategoryToggled} />
       </div>
-    </div> -->
+    </div>
     <Category {categories} name="Home" expanded />
   </Bar>
 
   <Bar title="Notes" barColor="#202226" position="1">
-    <!-- <div class="slot" slot="toolbar">
+    <div class="slot" slot="toolbar">
       <div class="toolbar">
         <Tool
           name="Add"
@@ -208,7 +233,7 @@
           color="#202226"
           on:toggle={searchNoteToggled} />
       </div>
-    </div> -->
+    </div>
     {#each notes as note}
       <Note {...note} on:noteToggled={selectNote} />
     {:else}
@@ -217,6 +242,6 @@
   </Bar>
 
   <div id="editor-container">
-    <Editor {title} {markdown} />
+    <Editor {title} {markdown} bind:updatedTitle bind:updatedMarkdown />
   </div>
 </div>

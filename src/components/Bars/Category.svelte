@@ -27,7 +27,7 @@
 
   function categoryToggled() {
     //console.log(categories)
-    console.log(newCategory);
+    // console.log(newCategory);
     categorySelected.set({ name: name, id: id });
   }
 

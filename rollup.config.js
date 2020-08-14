@@ -34,7 +34,7 @@ const minifyHtml = (input, output, options) => ({
 export default {
   input: path.join(srcDir, 'main.js'),
   output: {
-    sourcemap: false,
+    sourcemap: true,
     format: 'iife',
     name: 'app',
     file: path.join(publicDir, 'bundle.js'),

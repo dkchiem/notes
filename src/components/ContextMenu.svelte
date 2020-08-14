@@ -8,7 +8,7 @@
     active = false;
 
   function activateContextMenu(e) {
-    console.log(e);
+    // console.log(e);
     transformOrigin = 'top left';
     menu.style.top = e.pageY + 'px';
     menu.style.left = e.pageX + 'px';
@@ -17,8 +17,7 @@
 
   export function activateDropdownMenu(e) {
     transformOrigin = 'top right';
-    console.log(e);
-    console.log('Hey');
+    // console.log(e);
     // menu.style.top = e.pageY + 'px';
     // menu.style.right = e.pageX + 'px';
     // active = true;

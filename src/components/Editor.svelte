@@ -7,11 +7,14 @@
   import 'github-markdown-css/github-markdown.css';
 
   export let title = '',
-    markdown = '';
+    markdown = '',
+    updatedTitle;
 
   let html = '';
   let markdownField;
   let editor;
+
+  $: updatedTitle = title;
 
   onMount(() => {
     editor = CodeMirror.fromTextArea(markdownField, {
@@ -36,6 +39,7 @@
 
   function makeMarkdown() {
     const textEntered = editor.getValue();
+    updatedMarkdown = textEntered;
     marked.setOptions({
       highlight: function (code, lang) {
         return hljs.highlight(lang, code).value;

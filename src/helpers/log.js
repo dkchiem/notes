@@ -9,4 +9,13 @@ function dev(logData) {
   }
 }
 
-export default { dev };
+function error(logData) {
+  const env = process.env.NODE_ENV;
+  console.error(
+    '%c[ERROR] ' + `%c${logData}`,
+    'color: red; font-weight: bold',
+    '',
+  );
+}
+
+export default { dev, error };

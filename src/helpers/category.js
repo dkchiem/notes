@@ -66,7 +66,7 @@ export function getCategories(userID) {
         });
       })
       .catch((error) => {
-        console.log('Error getting documents: ', error);
+        log.error('Error getting documents: ', error);
         reject();
       });
   });
@@ -91,13 +91,12 @@ export function addCategory(userID, name) {
           parent: '',
         });
         console.log(categoriesArray);
-        //categoriesArray = categoriesArray;
         categoriesStore.set(makeCategoriesObject(categoriesArray));
         log.dev('Add category - data');
         resolve();
       })
       .catch((error) => {
-        console.log('Error getting documents: ', error);
+        log.error('Error getting documents: ', error);
         reject();
       });
   });
@@ -124,7 +123,7 @@ export function renameCategory(userID, categoryID, name) {
         });
       })
       .catch((error) => {
-        console.log('Error getting documents: ', error);
+        log.error('Error getting documents: ', error);
         reject();
       });
   });
@@ -163,7 +162,7 @@ export function changeParent(userID) {
         });
       })
       .catch((error) => {
-        console.log('Error getting documents: ', error);
+        log.error('Error getting documents: ', error);
         reject();
       });
   });

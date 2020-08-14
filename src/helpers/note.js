@@ -15,7 +15,11 @@ export function getNotes(userID, categoryID) {
       .then((querySnapshot) => {
         if (querySnapshot.size > 0) {
           querySnapshot.forEach((doc) => {
-            dataArray.push(doc.data());
+            dataArray.push({
+              name: doc.data().name,
+              id: doc.id,
+              markdown: doc.data().markdown,
+            });
             index++;
             if (index === querySnapshot.size - 1) {
               resolve(dataArray);
@@ -26,7 +30,7 @@ export function getNotes(userID, categoryID) {
         }
       })
       .catch((error) => {
-        console.log('Error getting documents: ', error);
+        log.error('Error getting documents: ', error);
         reject();
       });
   });
@@ -44,6 +48,7 @@ export function addNote(userID, categoryID, name) {
       .collection('notes')
       .add({
         name: name === '' ? '' : 'Untitled',
+        markdown: '',
       })
       .then((docRef) => {
         categoriesArray.push({
@@ -51,14 +56,14 @@ export function addNote(userID, categoryID, name) {
           id: docRef.id,
           parent: '',
         });
-        console.log(categoriesArray);
+        // console.log(categoriesArray);
         //categoriesArray = categoriesArray;
         categoriesStore.set(makeCategoriesObject(categoriesArray));
         log.dev('Add category - data');
         resolve();
       })
       .catch((error) => {
-        console.log('Error getting documents: ', error);
+        log.error('Error getting documents: ', error);
         reject();
       });
   });
@@ -81,7 +86,7 @@ export function saveNote(userID, categoryID, noteID, name, markdown) {
         resolve('Saved successfully');
       })
       .catch((error) => {
-        console.log('Error getting documents: ', error);
+        log.error('Error getting documents: ', error);
         reject();
       });
   });

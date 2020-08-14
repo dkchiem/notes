@@ -33,39 +33,75 @@ export function logout() {
         // navigateTo('/login');
       })
       .catch((error) => {
-        console.log(error);
+        log.error(error);
         reject(errorMessage);
       });
   });
 }
 
-// export function signInUser(email, password) {
-//   return firebase.auth().signInWithEmailAndPassword(email, password);
-//   // .then(() => {
+export function signUp(email, password, callback) {
+  firebase
+    .auth()
+    .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    .then(() => {
+      return firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          callback();
+        })
+        .catch(function (error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          log.error(`Error ${errorCode}: ${errorMessage}`);
+          callback(errorMessage);
+        });
+    })
+    .catch(function (error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      log.error(`Error ${errorCode}: ${errorMessage}`);
+      callback(errorMessage);
+    });
+}
 
-//   // })
-//   // .catch(function (error) {
-//   //   var errorCode = error.code;
-//   //   var errorMessage = error.message;
-//   //   showSpinner = false;
-//   //   console.log(`Error ${errorCode}: ${errorMessage}`);
-//   //   errorMsg = errorMessage;
-//   // });
-// }
-
-// export function createUser(email, password) {
-//   return new Promise((resolve, reject) => {
-//     firebase
-//       .auth()
-//       .createUserWithEmailAndPassword(email, password)
-//       .then(() => {
-//         resolve();
-//       })
-//       .catch((error) => {
-//         var errorCode = error.code;
-//         var errorMessage = error.message;
-//         console.log(`Error ${errorCode}: ${errorMessage}`);
-//         reject(new Error(errorMessage));
-//       });
-//   });
-// }
+export function login(email, password, staySignedIn, callback) {
+  if (staySignedIn) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        callback();
+      })
+      .catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        log.error(`Error ${errorCode}: ${errorMessage}`);
+        callback(errorMessage);
+      });
+  } else {
+    firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(() => {
+        return firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password)
+          .then(() => {
+            callback();
+          })
+          .catch(function (error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            log.error(`Error ${errorCode}: ${errorMessage}`);
+            callback(errorMessage);
+          });
+      })
+      .catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        log.error(`Error ${errorCode}: ${errorMessage}`);
+        callback(errorMessage);
+      });
+  }
+}

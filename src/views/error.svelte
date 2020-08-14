@@ -1,5 +1,6 @@
 <script>
-  export let title, description;
+  export let title = '404',
+    description = 'Page not found';
 </script>
 
 <style lang="scss">
@@ -34,7 +35,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        min-width: 40%;
+        max-width: 40%;
       }
     }
   }
@@ -108,7 +109,7 @@
           0-12.356 5.78-11.981 12.654z" />
       </svg>
       <h1>{title}</h1>
-      <h3>{description}</h3>
+      <h2>{description}</h2>
     </div>
   </div>
 

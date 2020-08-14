@@ -1,7 +1,3 @@
-<script>
-  import App from '../App.svelte';
-</script>
-
 <style lang="scss">
   #container {
     display: flex;

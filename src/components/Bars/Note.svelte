@@ -4,11 +4,13 @@
 
   const dispatch = createEventDispatcher();
 
-  export let name;
+  export let name, id, markdown;
 
   function noteToggled() {
     dispatch('noteToggled', {
       name: name,
+      id: id,
+      markdown: markdown,
     });
   }
 </script>
