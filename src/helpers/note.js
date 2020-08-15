@@ -31,7 +31,7 @@ export function getNotes(userID, categoryID) {
         }
       })
       .catch((error) => {
-        log.error('Error getting documents: ', error);
+        log.error(error);
         reject();
       });
   });
@@ -61,7 +61,7 @@ export function addNote(userID, categoryID, name) {
         resolve(dataArray);
       })
       .catch((error) => {
-        log.error('Error getting documents: ', error);
+        log.error(error);
         reject();
       });
   });
@@ -84,7 +84,7 @@ export function saveNote(userID, categoryID, noteID, name, markdown) {
         resolve('Saved successfully');
       })
       .catch((error) => {
-        log.error('Error getting documents: ', error);
+        log.error(error);
         reject();
       });
   });

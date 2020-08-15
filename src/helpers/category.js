@@ -66,7 +66,7 @@ export function getCategories(userID) {
         });
       })
       .catch((error) => {
-        log.error('Error getting documents: ', error);
+        log.error(error);
         reject();
       });
   });
@@ -96,7 +96,7 @@ export function addCategory(userID, name) {
         resolve();
       })
       .catch((error) => {
-        log.error('Error getting documents: ', error);
+        log.error(error);
         reject();
       });
   });
@@ -123,7 +123,7 @@ export function renameCategory(userID, categoryID, name) {
         });
       })
       .catch((error) => {
-        log.error('Error getting documents: ', error);
+        log.error(error);
         reject();
       });
   });
@@ -162,7 +162,7 @@ export function changeParent(userID) {
         });
       })
       .catch((error) => {
-        log.error('Error getting documents: ', error);
+        log.error(error);
         reject();
       });
   });
