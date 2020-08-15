@@ -137,7 +137,8 @@
 
   #main-container {
     display: flex;
-    flex: 1;
+    height: 100vh;
+    padding-top: $header-height;
     .toolbar {
       display: flex;
     }

@@ -55,14 +55,6 @@
   }
 </script>
 
-<style lang="scss">
-  main {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-</style>
-
 <svelte:head>
   <title>Notes</title>
 </svelte:head>
@@ -70,9 +62,7 @@
 {#await isLoggedIn()}
   <Loading />
 {:then value}
-  <main>
-    <Router {routes} on:routeLoaded={routeLoaded} />
-  </main>
+  <Router {routes} on:routeLoaded={routeLoaded} />
 {:catch error}
   <ErrorPage title="Autentication Check Error" description={error.message} />
 {/await}

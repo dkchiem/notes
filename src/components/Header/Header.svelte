@@ -8,10 +8,10 @@
     border-bottom: $border;
     box-shadow: $box-shadow;
     display: flex;
-    height: 60px;
+    height: $header-height;
     padding: 0 30px;
-    // position: absolute;
-    // top: 0;
+    position: absolute;
+    top: 0;
     width: 100%;
     z-index: 1000;
 
