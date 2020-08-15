@@ -57,6 +57,7 @@
     categorySelected.subscribe(async (c) => {
       console.log(c);
       if (c.id) {
+        selectedNoteID = undefined;
         selectedCategoryID = c.id;
         notes = await getNotes(getUid(), c.id);
       }
@@ -88,18 +89,18 @@
 
   function searchCategoryToggled() {
     console.log('search');
+    console.log(selectedCategoryID);
+    console.log(selectedNoteID);
   }
 
   function addNoteToggled() {
     console.log('New note');
-    // categories.push({
-    //   name: 'New Category',
-    //   parent: '',
-    //   categories: [],
-    //   renaming: true,
-    //   newCategory: true,
-    // });
-    // categories = categories;
+    notes.push({
+      name: 'New Note',
+      renaming: true,
+      newNote: true,
+    });
+    notes = notes;
   }
 
   function searchNoteToggled() {
@@ -118,6 +119,15 @@
         updatedMarkdown,
       );
     }
+  }
+
+  function noteRenameSave(e) {
+    const data = e.detail[0];
+    notes.push({
+      name: data.name,
+      id: data.id,
+      markdown: '',
+    });
   }
 </script>
 
@@ -235,7 +245,11 @@
       </div>
     </div>
     {#each notes as note}
-      <Note {...note} on:noteToggled={selectNote} />
+      <Note
+        {...note}
+        on:noteToggled={selectNote}
+        on:renameSave={noteRenameSave}
+        parentCategoryID={selectedCategoryID} />
     {:else}
       <span id="no-notes">No notes found</span>
     {/each}

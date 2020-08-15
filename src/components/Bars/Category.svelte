@@ -40,7 +40,7 @@
     e.preventDefault();
   }
 
-  function cancelAddCategory() {
+  function cancelAddCategory(e) {
     e.stopPropagation();
   }
 

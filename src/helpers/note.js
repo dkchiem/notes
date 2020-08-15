@@ -1,4 +1,5 @@
 import firebase from 'firebase/app';
+import log from '@helpers/log.js';
 
 // Get
 export function getNotes(userID, categoryID) {
@@ -40,7 +41,7 @@ export function getNotes(userID, categoryID) {
 export function addNote(userID, categoryID, name) {
   return new Promise((resolve, reject) => {
     const db = firebase.firestore();
-
+    let dataArray = [];
     db.collection('users')
       .doc(userID)
       .collection('categories')
@@ -51,16 +52,13 @@ export function addNote(userID, categoryID, name) {
         markdown: '',
       })
       .then((docRef) => {
-        categoriesArray.push({
+        dataArray.push({
           name: name,
           id: docRef.id,
           parent: '',
         });
-        // console.log(categoriesArray);
-        //categoriesArray = categoriesArray;
-        categoriesStore.set(makeCategoriesObject(categoriesArray));
         log.dev('Add category - data');
-        resolve();
+        resolve(dataArray);
       })
       .catch((error) => {
         log.error('Error getting documents: ', error);

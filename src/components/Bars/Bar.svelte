@@ -67,7 +67,7 @@
       display: flex;
       flex-direction: column;
       padding-left: $content-left-margin;
-      height: 100%;
+      max-height: 100%;
       #bar-header {
         margin-bottom: 5px;
       }
@@ -77,6 +77,7 @@
       #items {
         flex: 1;
         position: relative;
+        overflow: scroll;
       }
     }
 

@@ -8,7 +8,8 @@
 
   export let title = '',
     markdown = '',
-    updatedTitle;
+    updatedTitle,
+    updatedMarkdown;
 
   let html = '';
   let markdownField;
@@ -30,7 +31,7 @@
     //console.log(CodeMirror.modes);
   });
 
-  $: if (markdown && editor) {
+  $: if (editor) {
     editor.getDoc().setValue(markdown);
     makeMarkdown();
   }
