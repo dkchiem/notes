@@ -9,8 +9,8 @@
   import Button from '@components/Button.svelte';
   // Interface
   import Bar from '@components/Bars/Bar.svelte';
-  import Category from '@components/Bars/Category.svelte';
-  import Note from '@components/Bars/Note.svelte';
+  import Category from '@components/Bars/Items/Category.svelte';
+  import Note from '@components/Bars/Items/Note.svelte';
   import Tool from '@components/Bars/Tool.svelte';
   import Editor from '@components/Editor.svelte';
 
@@ -22,7 +22,7 @@
     categorySelected,
   } from '@helpers/category.js';
   // Notes
-  import { getNotes, saveNote } from '@helpers/note.js';
+  import { getNotes, saveNote, notesStore } from '@helpers/note.js';
   import { userID, getUid, logout } from '@helpers/user.js';
   // Log
   import log from '@helpers/log.js';
@@ -50,12 +50,14 @@
     await getCategories(getUid());
     // Update categories
     categoriesStore.subscribe((c) => {
-      log.dev('categoriesStore update');
       categories = c;
     });
     //Update notes
+    notesStore.subscribe((n) => {
+      notes = n;
+    });
+    //Update notes after category selected
     categorySelected.subscribe(async (c) => {
-      console.log(c);
       if (c.id) {
         selectedNoteID = undefined;
         selectedCategoryID = c.id;

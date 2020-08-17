@@ -130,32 +130,39 @@ export function renameCategory(userID, categoryID, name) {
 }
 
 // Drag & drop
-export const destinationCategory = writable('');
-export const initalCategory = writable('');
 
-export function changeParent(userID) {
+export const draggedItemIsCategory = writable(true);
+
+export function getDraggedItemIsCategory() {
+  let isCategory;
+  draggedItemIsCategory.subscribe((ic) => {
+    isCategory = ic;
+  });
+  return isCategory;
+}
+
+export const draggedCategory = writable('');
+
+export function changeCategoryParent(userID, destination) {
   return new Promise((resolve, reject) => {
     log.dev('firebase: changing category parent');
-    let categoryInitial, categoryDest;
-    initalCategory.subscribe((c) => {
-      categoryInitial = c;
-    });
-    destinationCategory.subscribe((c) => {
-      categoryDest = c;
+    let origin;
+    draggedCategory.subscribe((c) => {
+      origin = c;
     });
 
     const db = firebase.firestore();
     db.collection('users')
       .doc(userID)
       .collection('categories')
-      .doc(categoryInitial)
+      .doc(origin)
       .update({
-        parent: categoryDest,
+        parent: destination,
       })
       .then(() => {
         categoriesArray.forEach((obj) => {
-          if (obj.id === categoryInitial) {
-            obj.parent = categoryDest;
+          if (obj.id === origin) {
+            obj.parent = destination;
             categoriesStore.set(makeCategoriesObject(categoriesArray));
             resolve('Updated successfully');
           }

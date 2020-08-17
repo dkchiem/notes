@@ -1,5 +1,9 @@
+import { writable } from 'svelte/store';
 import firebase from 'firebase/app';
 import log from '@helpers/log.js';
+
+// Notes store
+export const notesStore = writable([]);
 
 // Get
 export function getNotes(userID, categoryID) {
@@ -23,6 +27,7 @@ export function getNotes(userID, categoryID) {
             });
             index++;
             if (index === querySnapshot.size - 1) {
+              notesStore.set(dataArray);
               resolve(dataArray);
             }
           });
@@ -87,5 +92,71 @@ export function saveNote(userID, categoryID, noteID, name, markdown) {
         log.error(error);
         reject();
       });
+  });
+}
+
+// Drag & drop
+
+export const draggedNote = writable({});
+
+export function changeNoteParent(userID, destination) {
+  return new Promise((resolve, reject) => {
+    log.dev('firebase: changing note parent');
+    let origin;
+    draggedNote.subscribe((c) => {
+      origin = c;
+    });
+
+    const db = firebase.firestore();
+    moveFbRecord(
+      db
+        .collection('users')
+        .doc(userID)
+        .collection('categories')
+        .doc(origin.parentCategoryID)
+        .collection('notes')
+        .doc(origin.noteID),
+      db
+        .collection('users')
+        .doc(userID)
+        .collection('categories')
+        .doc(destination)
+        .collection('notes')
+        .doc(origin.noteID),
+    )
+      .then(() => {
+        let notesArray;
+        notesStore.subscribe((n) => {
+          notesArray = n;
+        });
+        notesArray.forEach((obj, index) => {
+          if (obj.id === origin.noteID) {
+            notesArray.splice(index, 1);
+            notesStore.set(notesArray);
+            resolve('Updated successfully');
+          }
+        });
+      })
+      .catch((error) => {
+        log.error(error);
+        reject();
+      });
+  });
+}
+
+function moveFbRecord(oldRef, newRef) {
+  return new Promise(async (resolve, reject) => {
+    oldRef.get().then(function (doc) {
+      newRef
+        .set(doc.data())
+        .then(() => {
+          oldRef.delete();
+          resolve('Moved successfully');
+        })
+        .catch((error) => {
+          log.error(error);
+          reject();
+        });
+    });
   });
 }

@@ -9,7 +9,7 @@
   export let title = '',
     markdown = '',
     updatedTitle,
-    updatedMarkdown;
+    updatedMarkdown = '';
 
   let html = '';
   let markdownField;
