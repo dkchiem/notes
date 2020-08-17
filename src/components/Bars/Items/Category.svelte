@@ -90,7 +90,8 @@
   on:renameSave={renameSave}
   on:selectItem={categoryToggled}
   on:dragItem={categoryDragged}
-  on:dropItem={categoryDropped}>
+  on:dropItem={categoryDropped}
+  bind:newName={name}>
   {#if nochild}
     <div id="space2" />
   {/if}

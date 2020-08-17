@@ -7,7 +7,8 @@
   export let name,
     renaming = false,
     newItem = false,
-    droppable = false;
+    droppable = false,
+    newName = '';
 
   // SVG
   export let path, viewBox;
@@ -192,7 +193,7 @@
     <input
       id="rename"
       type="text"
-      bind:value={name}
+      bind:value={newName}
       placeholder="Name"
       autocomplete="off"
       on:keyup={renameKeyup}

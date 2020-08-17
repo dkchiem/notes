@@ -42,4 +42,5 @@
   viewBox="0 0 448 512"
   on:renameSave={renameSave}
   on:selectItem={noteToggled}
-  on:dragItem={noteDragged} />
+  on:dragItem={noteDragged}
+  bind:newName={name} />

@@ -77,20 +77,21 @@ export function addCategory(userID, name) {
   return new Promise((resolve, reject) => {
     const db = firebase.firestore();
 
+    const formatedName = name || 'Untitled';
+
     db.collection('users')
       .doc(userID)
       .collection('categories')
       .add({
-        name: name === '' ? '' : 'Untitled',
+        name: formatedName,
         parent: '',
       })
       .then((docRef) => {
         categoriesArray.push({
-          name: name,
+          name: formatedName,
           id: docRef.id,
           parent: '',
         });
-        console.log(categoriesArray);
         categoriesStore.set(makeCategoriesObject(categoriesArray));
         log.dev('Add category - data');
         resolve();
