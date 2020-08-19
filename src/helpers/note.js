@@ -160,3 +160,34 @@ function moveFbRecord(oldRef, newRef) {
     });
   });
 }
+
+// Delete
+export function deleteNote(userID, categoryID, noteID) {
+  return new Promise((resolve, reject) => {
+    const db = firebase.firestore();
+    db.collection('users')
+      .doc(userID)
+      .collection('categories')
+      .doc(categoryID)
+      .collection('notes')
+      .doc(noteID)
+      .delete()
+      .then(() => {
+        let notesArray;
+        notesStore.subscribe((n) => {
+          notesArray = n;
+        });
+        notesArray.forEach((obj, index) => {
+          if (obj.id === noteID) {
+            notesArray.splice(index, 1);
+            notesStore.set(notesArray);
+            resolve('Deleted successfully');
+          }
+        });
+      })
+      .catch((error) => {
+        log.error(error);
+        reject();
+      });
+  });
+}

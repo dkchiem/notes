@@ -7,6 +7,7 @@
     addCategory,
     draggedItemIsCategory,
     getDraggedItemIsCategory,
+    deleteCategory,
   } from '@helpers/category.js';
   import { changeNoteParent } from '@helpers/note.js';
   import { getUid } from '@helpers/user.js';
@@ -18,7 +19,7 @@
     parent = '',
     renaming = false,
     newCategory = false;
-  let item, settings, categoryId;
+  let item, categoryId;
   $: nochild = categories && (nochild = categories.length == 0 ? true : false);
 
   function categoryExpanded(e) {
@@ -47,6 +48,16 @@
       await changeNoteParent(getUid(), destination);
     }
     expanded = true;
+  }
+
+  function categoryDelete() {
+    const categoryIds = [];
+    categoryIds.push(id);
+    JSON.stringify(categories, (key, value) => {
+      if (key === 'id') categoryIds.push(value);
+      return value;
+    });
+    deleteCategory(getUid(), categoryIds);
   }
 </script>
 
@@ -91,6 +102,7 @@
   on:selectItem={categoryToggled}
   on:dragItem={categoryDragged}
   on:dropItem={categoryDropped}
+  on:delete={categoryDelete}
   bind:newName={name}>
   {#if nochild}
     <div id="space2" />

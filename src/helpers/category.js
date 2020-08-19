@@ -9,7 +9,7 @@ export const categorySelected = writable({});
 export const categoriesStore = writable([]);
 
 // Categories array flat tree
-let categoriesArray;
+let categoriesArray = [];
 
 // Create categories tree
 function makeCategoriesObject(array) {
@@ -127,6 +127,33 @@ export function renameCategory(userID, categoryID, name) {
         log.error(error);
         reject();
       });
+  });
+}
+
+// Delete
+export function deleteCategory(userID, categoryIDArray) {
+  return new Promise((resolve, reject) => {
+    const db = firebase.firestore();
+    categoryIDArray.forEach((categoryID) => {
+      db.collection('users')
+        .doc(userID)
+        .collection('categories')
+        .doc(categoryID)
+        .delete()
+        .then(() => {
+          categoriesArray.forEach((obj, index) => {
+            if (obj.id === categoryID) {
+              categoriesArray.splice(index, 1);
+              categoriesStore.set(makeCategoriesObject(categoriesArray));
+              resolve('Deleted successfully');
+            }
+          });
+        })
+        .catch((error) => {
+          log.error(error);
+          reject();
+        });
+    });
   });
 }
 

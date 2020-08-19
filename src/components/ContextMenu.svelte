@@ -114,8 +114,4 @@
     <i class="fa fa-refresh" />
     Reload
   </li>
-  <li class="item">
-    <i class="fa fa-times" />
-    Exit
-  </li>
 </ul>

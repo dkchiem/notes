@@ -33,7 +33,7 @@
 
   let title,
     markdown,
-    categories,
+    categories = [],
     notes = [],
     selectedCategoryID,
     selectedNoteID,

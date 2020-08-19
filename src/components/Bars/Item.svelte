@@ -13,7 +13,7 @@
   // SVG
   export let path, viewBox;
 
-  let item, settings;
+  let item, settings, optionsMenu;
 
   // Click actions
 
@@ -23,12 +23,15 @@
 
   function settingsToggled(e) {
     e.stopPropagation();
-    settings = !settings;
+    optionsMenu.style.top = e.pageY + 'px';
+    optionsMenu.style.left = e.pageX + 'px';
+    settings = true;
+    // dispatch('settingsToggled');
   }
 
-  function contextMenuToggled(e) {
-    e.preventDefault();
-  }
+  // function contextMenuToggled(e) {
+  //   e.preventDefault();
+  // }
 
   function cancelAddItem(e) {
     e.stopPropagation();
@@ -39,7 +42,7 @@
     // Enter key
     if (e.keyCode === 13) {
       renaming = false;
-      // addItem(getUid(), name);
+      item.setAttribute('draggable', 'true');
       dispatch('renameSave');
     }
   }
@@ -84,6 +87,65 @@
 
 <style lang="scss">
   @import 'src/styles/_theme.scss';
+
+  @keyframes scaleIn {
+    0% {
+      opacity: 1;
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  #options-menu {
+    position: fixed;
+    z-index: 10000;
+    width: 150px;
+    background: #1b1a1a;
+    border-radius: 5px;
+    transform-origin: top left;
+    list-style: none;
+    overflow: hidden;
+    display: none;
+    &.active {
+      display: block;
+      animation: scaleIn 0.3s ease-in-out;
+      animation-fill-mode: forwards;
+    }
+    .options-item {
+      padding: 8px 10px;
+      font-size: 15px;
+      color: white;
+      cursor: pointer;
+      &:hover {
+        background-color: #555;
+      }
+      i {
+        display: inline-block;
+        margin-right: 5px;
+      }
+    }
+    // hr {
+    //   margin: 2px 0px;
+    //   background-color: #555;
+    //   border: none;
+    //   height: 1px;
+    // }
+  }
+
+  #overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: none;
+    z-index: 1050;
+    &.active {
+      display: block;
+    }
+  }
 
   .item {
     align-items: center;
@@ -145,7 +207,43 @@
   }
 </style>
 
-<!-- class:nochild -->
+<!-- on:contextmenu={contextMenuToggled} -->
+
+<ul id="options-menu" class:active={settings} bind:this={optionsMenu}>
+  <!-- <li class="options-item">
+    <i class="fa fa-cut" />
+    Cut
+  </li>
+  <li class="options-item">
+    <i class="fa fa-clone" />
+    Copy
+  </li>
+  <li class="options-item">
+    <i class="fa fa-paste" />
+    Paste
+  </li> -->
+  <li
+    class="options-item"
+    on:click={() => {
+      settings = false;
+      dispatch('delete');
+    }}>
+    <i class="fa fa-trash-o" />
+    Delete
+  </li>
+  <!-- <hr />
+  <li class="options-item">
+    <i class="fa fa-refresh" />
+    Reload
+  </li> -->
+</ul>
+
+<div
+  id="overlay"
+  class:active={settings}
+  on:click={() => {
+    settings = false;
+  }} />
 
 <div
   class="item"
@@ -153,7 +251,6 @@
   draggable="true"
   bind:this={item}
   on:click={itemToggled}
-  on:contextmenu={contextMenuToggled}
   on:dragstart={dragStart}
   on:dragend={dragEnd}
   on:dragenter={dragEnter}

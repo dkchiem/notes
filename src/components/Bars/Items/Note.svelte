@@ -1,6 +1,6 @@
 <script>
   import Item from '@components/Bars/Item.svelte';
-  import { addNote, draggedNote } from '@helpers/note.js';
+  import { addNote, draggedNote, deleteNote } from '@helpers/note.js';
   import { getUid } from '@helpers/user.js';
   import { createEventDispatcher } from 'svelte';
   import { draggedItemIsCategory } from '@helpers/category.js';
@@ -30,6 +30,10 @@
     draggedItemIsCategory.set(false);
     draggedNote.set({ parentCategoryID, noteID: id });
   }
+
+  function noteDelete() {
+    deleteNote(getUid(), parentCategoryID, id);
+  }
 </script>
 
 <Item
@@ -43,4 +47,5 @@
   on:renameSave={renameSave}
   on:selectItem={noteToggled}
   on:dragItem={noteDragged}
+  on:delete={noteDelete}
   bind:newName={name} />
