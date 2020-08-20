@@ -5,6 +5,9 @@ import log from '@helpers/log.js';
 // Notes store
 export const notesStore = writable([]);
 
+// "Cached" notes
+let cachedNotesArray;
+
 // Get
 export function getNotes(userID, categoryID) {
   return new Promise((resolve, reject) => {
@@ -27,6 +30,7 @@ export function getNotes(userID, categoryID) {
             });
             index++;
             if (index === querySnapshot.size - 1) {
+              cachedNotesArray = dataArray;
               notesStore.set(dataArray);
               resolve(dataArray);
             }
@@ -53,7 +57,7 @@ export function addNote(userID, categoryID, name) {
       .doc(categoryID)
       .collection('notes')
       .add({
-        name: name === '' ? '' : 'Untitled',
+        name: name || 'Untitled',
         markdown: '',
       })
       .then((docRef) => {
@@ -190,4 +194,10 @@ export function deleteNote(userID, categoryID, noteID) {
         reject();
       });
   });
+}
+
+// Reset temporary changes
+
+export function resetTemporaryChanges() {
+  notesStore.set(cachedNotesArray);
 }

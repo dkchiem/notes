@@ -35,6 +35,7 @@
 
   function cancelAddItem(e) {
     e.stopPropagation();
+    dispatch('cancelAdd');
   }
 
   // Text input actions
@@ -42,6 +43,7 @@
     // Enter key
     if (e.keyCode === 13) {
       renaming = false;
+      newItem = false;
       item.setAttribute('draggable', 'true');
       dispatch('renameSave');
     }

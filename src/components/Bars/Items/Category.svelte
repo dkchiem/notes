@@ -8,6 +8,7 @@
     draggedItemIsCategory,
     getDraggedItemIsCategory,
     deleteCategory,
+    resetTemporaryChanges,
   } from '@helpers/category.js';
   import { changeNoteParent } from '@helpers/note.js';
   import { getUid } from '@helpers/user.js';
@@ -103,6 +104,7 @@
   on:dragItem={categoryDragged}
   on:dropItem={categoryDropped}
   on:delete={categoryDelete}
+  on:cancelAdd={resetTemporaryChanges}
   bind:newName={name}>
   {#if nochild}
     <div id="space2" />

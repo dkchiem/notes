@@ -79,14 +79,18 @@
   }
 
   function addCategoryToggled() {
-    categories.push({
-      name: 'New Category',
-      parent: '',
-      categories: [],
-      renaming: true,
-      newCategory: true,
-    });
-    categories = categories;
+    if (categories.some((e) => e.newCategory === true)) {
+      // Do nothing
+    } else {
+      categories.push({
+        name: 'New Category',
+        parent: '',
+        categories: [],
+        renaming: true,
+        newCategory: true,
+      });
+      categories = categories;
+    }
   }
 
   function searchCategoryToggled() {
@@ -96,13 +100,16 @@
   }
 
   function addNoteToggled() {
-    console.log('New note');
-    notes.push({
-      name: 'New Note',
-      renaming: true,
-      newNote: true,
-    });
-    notes = notes;
+    if (notes.some((e) => e.newNote === true)) {
+      // Do nothing
+    } else {
+      notes.push({
+        name: 'New Note',
+        renaming: true,
+        newNote: true,
+      });
+      notes = notes;
+    }
   }
 
   function searchNoteToggled() {
@@ -143,10 +150,6 @@
     padding-top: $header-height;
     .toolbar {
       display: flex;
-    }
-    #no-notes {
-      position: absolute;
-      top: 0;
     }
     #editor-container {
       width: auto;

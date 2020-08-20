@@ -202,3 +202,9 @@ export function changeCategoryParent(userID, destination) {
       });
   });
 }
+
+// Reset temporary changes
+
+export function resetTemporaryChanges() {
+  categoriesStore.set(makeCategoriesObject(categoriesArray));
+}

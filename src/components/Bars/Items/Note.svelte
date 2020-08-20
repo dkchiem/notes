@@ -1,6 +1,11 @@
 <script>
   import Item from '@components/Bars/Item.svelte';
-  import { addNote, draggedNote, deleteNote } from '@helpers/note.js';
+  import {
+    addNote,
+    draggedNote,
+    deleteNote,
+    resetTemporaryChanges,
+  } from '@helpers/note.js';
   import { getUid } from '@helpers/user.js';
   import { createEventDispatcher } from 'svelte';
   import { draggedItemIsCategory } from '@helpers/category.js';
@@ -48,4 +53,5 @@
   on:selectItem={noteToggled}
   on:dragItem={noteDragged}
   on:delete={noteDelete}
+  on:cancelAdd={resetTemporaryChanges}
   bind:newName={name} />
