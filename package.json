@@ -34,7 +34,7 @@
     "firebase": "^7.17.1",
     "github-markdown-css": "^4.0.0",
     "highlight.js": "^10.1.2",
-    "marked": "^1.1.1",
+    "marked": "^2.0.0",
     "svelte-spa-router": "^2.2.0",
     "sweetalert2": "^9.17.1"
   },
